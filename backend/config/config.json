@@ -1,23 +1,16 @@
 {
   "development": {
     "username": "avnadmin",
-    "database": "bridgedb",
-    "host": "bridgedb-bridge-real-estate.a.aivencloud.com",
-    "port": 19292,
-    "dialect": "mysql"
+    "database": "bridgedb"
   },
+
   "test": {
     "username": "avnadmin",
-    "database": "bridgedb",
-    "host": "bridgedb-bridge-real-estate.a.aivencloud.com",
-    "port": 19292,
-    "dialect": "mysql"
+    "database": "bridgedb"
   },
+
   "production": {
     "username": "avnadmin",
-    "database": "bridgedb",
-    "host": "bridgedb-bridge-real-estate.a.aivencloud.com",
-    "port": 19292,
-    "dialect": "mysql"
+    "database": "bridgedb"
   }
 }
