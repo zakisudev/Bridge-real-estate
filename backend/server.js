@@ -1,7 +1,8 @@
 require('dotenv').config();
 const express = require('express');
-const port = process.env.PORT || 5000;
 const cors = require('cors');
+
+const port = process.env.PORT || 5000;
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', (req, res) => {
-  res.send('Hello from API');
+  res.send('API is running ...');
 });
 
 // Start server
