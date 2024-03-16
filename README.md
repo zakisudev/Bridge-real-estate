@@ -57,14 +57,14 @@ npm install
 
 ```bash
 cd ../backend
-npm start
+npm run server
 ```
 
 6. Start the client:
 
 ```bash
 cd ../frontend
-npm start
+npm run dev
 ```
 
 7. Open your browser and visit `http://localhost:3000` to view the application.
