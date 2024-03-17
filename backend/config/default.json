@@ -1,9 +1,9 @@
 {
   "database": {
-    "port": "5000",
-    "host": "localhost",
-    "user": "root",
+    "user": "avnadmin",
+    "name": "defaultdb",
+    "host": "bridgedb-bridge-real-estate.a.aivencloud.com",
     "password": "",
-    "name": "bridge_db"
+    "port": 19292
   }
 }
