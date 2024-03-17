@@ -1,0 +1,9 @@
+{
+  "database": {
+    "port": "5000",
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "name": "bridge_db"
+  }
+}
