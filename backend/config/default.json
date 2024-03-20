@@ -1,9 +1,9 @@
 {
   "database": {
-    "user": "avnadmin",
-    "name": "defaultdb",
-    "host": "bridgedb-bridge-real-estate.a.aivencloud.com",
-    "password": "",
-    "port": 19292
+    "user": "root",
+    "name": "bridge_db",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306
   }
 }
