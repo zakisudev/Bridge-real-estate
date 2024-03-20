@@ -6,9 +6,7 @@ const logger = createLogger({
     format.timestamp({
       format: "YYYY-MM-DD HH:mm:ss",
     }),
-    format.printf(
-      (info: any) => `${info.timestamp} ${info.level}: ${info.message}`
-    )
+    format.combine(format.timestamp(), format.json(), format.prettyPrint())
   ),
   transports: [
     new transports.Console(),
