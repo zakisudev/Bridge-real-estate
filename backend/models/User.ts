@@ -6,8 +6,8 @@ export class User extends Model {
   public email!: string;
   public password!: string;
   public is_admin!: boolean;
-  public createdAt!: Date;
-  public updatedAt!: Date;
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 export default (sequelize: Sequelize) => {
