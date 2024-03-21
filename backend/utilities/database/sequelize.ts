@@ -21,7 +21,7 @@ export default async () => {
   MODEL(sequelize);
 
   sequelize
-    .sync({ force: true, alter: false })
+    .sync({ force: false, alter: false })
     .then((sequelize) => {
       logger.info("Database Connected Successfully");
     })

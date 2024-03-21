@@ -28,6 +28,7 @@
     "config": "^3.3.11",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "evalidate": "^1.0.5",
     "express": "^4.18.3",
     "mysql2": "^3.9.2",
     "sequelize": "^6.37.1",
