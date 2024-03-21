@@ -15,6 +15,18 @@ class UserService {
       throw error;
     }
   }
+
+  static async findAll(query: any): Promise<User[]> {
+    return new Promise((resolve, reject) => {
+      UserDal.findAll(query)
+        .then((result: User[]) => {
+          resolve(result);
+        })
+        .catch((error: Error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export default UserService;

@@ -5,9 +5,7 @@ let router: Router = Router();
 
 router
   .post("/", UserController.create)
-  .get("/", (req, res) => {
-    res.send("Users GET route is working ...");
-  })
+  .get("/", UserController.findAll)
   .get("/:id", (req, res) => {
     res.send("Users GET by id route is working ...");
   })

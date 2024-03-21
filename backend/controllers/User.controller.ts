@@ -1,4 +1,4 @@
-import e, { Request, Response } from "express";
+import e, { query, Request, Response } from "express";
 import evalidate from "evalidate";
 import { User } from "../models";
 import UserService from "../services/User.service";
@@ -34,6 +34,17 @@ class UserController {
         errors[err.field] = err.message;
       });
     }
+  }
+
+  static async findAll(req: Request, res: Response) {
+    const query = req.query;
+    UserService.findAll(query)
+      .then((result: User[]) => {
+        res.status(200).json(result);
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
   }
 }
 
