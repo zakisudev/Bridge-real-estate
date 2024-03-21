@@ -84,7 +84,7 @@ export default (sequelize: Sequelize) => {
     {
       sequelize,
       tableName: "properties",
-      modelName: "property",
+      modelName: "Property",
     }
   );
 };

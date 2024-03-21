@@ -1,11 +1,14 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
+import { Sequelize, Model, DataTypes } from 'sequelize';
 
 export class User extends Model {
   public id!: number;
-  public name!: string;
+  public username!: string;
+  public firstName!: string;
+  public lastName!: string;
   public email!: string;
   public password!: string;
   public is_admin!: boolean;
+  public avatar: string | undefined;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -18,7 +21,15 @@ export default (sequelize: Sequelize) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -35,11 +46,15 @@ export default (sequelize: Sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      avatar: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,
-      tableName: "users",
-      modelName: "User",
+      tableName: 'users',
+      modelName: 'User',
     }
   );
 };
