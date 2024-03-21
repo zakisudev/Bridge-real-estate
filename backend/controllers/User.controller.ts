@@ -24,7 +24,6 @@ class UserController {
       UserService.create(req.body)
         .then((result: User) => {
           res.status(201).json(result);
-          console.log("User created successfully");
         })
         .catch((error: Error) => {
           res.status(400).json({ message: error.message });

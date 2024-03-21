@@ -1,4 +1,5 @@
 import { Sequelize, Model, DataTypes } from "sequelize";
+import { hashPassword } from "../utilities/helper/helper";
 
 export class User extends Model {
   public id!: number;
@@ -40,6 +41,11 @@ export default (sequelize: Sequelize) => {
       sequelize,
       tableName: "users",
       modelName: "User",
+      hooks: {
+        beforeCreate: async (user: any) => {
+          user.password = await hashPassword(user.password);
+        },
+      },
     }
   );
 };
