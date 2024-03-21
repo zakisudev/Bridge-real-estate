@@ -1,20 +1,13 @@
 // reducers.ts
 import { combineReducers } from 'redux';
-import { useDispatch } from 'react-redux';
-import { all } from 'redux-saga/effects';
 import userReducer from './users/userReducer';
-import { watchUserSaga } from './sagas';
+import propertyReducer from './property/propertyReducer';
+import authReducer from './auth/authReducer';
 
 const rootReducer = combineReducers({
+  auth: authReducer,
   user: userReducer,
+  property: propertyReducer,
 });
-
-export type RootState = ReturnType<typeof rootReducer>;
-
-export function* rootSaga() {
-  yield all([watchUserSaga()]);
-}
-
-export type AppDispatch = typeof useDispatch;
 
 export default rootReducer;
