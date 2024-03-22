@@ -6,6 +6,7 @@ export class User extends Model {
   public username!: string;
   public firstName!: string;
   public lastName!: string;
+  public phone!: number;
   public email!: string;
   public password!: string;
   public is_admin!: boolean;
@@ -21,8 +22,20 @@ export default (sequelize: Sequelize) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      username: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      phone: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
       },
       email: {
