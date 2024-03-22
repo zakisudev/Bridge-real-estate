@@ -1,19 +1,21 @@
-import config from "config";
-import { Sequelize, Transaction } from "sequelize";
-import logger from "../loggers/log";
-import { MODEL } from "../../models";
+import config from 'config';
+import { Sequelize, Transaction } from 'sequelize';
+import logger from '../loggers/log';
+import { MODEL } from '../../models';
 
 export let sequelize: Sequelize;
 
 export default async () => {
-  let dbHost: string = config.get("database.host");
-  let dbName: string = config.get("database.name");
-  let dbUser: string = config.get("database.user");
-  let dbPassword: string = process.env.DB_PASSWORD || "";
+  let dbHost: string = config.get('database.host');
+  let dbName: string = config.get('database.name');
+  let dbUser: string = config.get('database.user');
+  let dbPort: number = config.get('database.port');
+  let dbPassword: string = process.env.DB_PASSWORD || '';
 
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
-    dialect: "mysql",
+    dialect: 'mysql',
+    port: dbPort,
     dialectOptions: { decimalNumbers: true },
     logging: console.log,
   });
@@ -23,10 +25,10 @@ export default async () => {
   sequelize
     .sync({ force: false, alter: false })
     .then((sequelize) => {
-      logger.info("Database Connected Successfully");
+      logger.info('Database Connected Successfully');
     })
     .catch((err) => {
-      logger.error("Database Connection Failed");
+      logger.error('Database Connection Failed');
       logger.error(err);
     });
 };
