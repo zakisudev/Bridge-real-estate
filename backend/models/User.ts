@@ -6,7 +6,7 @@ export class User extends Model {
   public username!: string;
   public firstName!: string;
   public lastName!: string;
-  public phone!: number;
+  public phone!: string;
   public email!: string;
   public password!: string;
   public is_admin!: boolean;
@@ -35,7 +35,7 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       phone: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       email: {

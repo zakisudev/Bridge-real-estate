@@ -33,6 +33,60 @@ class UserDal {
         });
     });
   }
+
+  static async findOne(query: any, options?: any): Promise<User> {
+    return new Promise((resolve, reject) => {
+      User.findOne({
+        where: query,
+        ...options,
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async update(
+    query: any,
+    payload: User,
+    transaction?: Transaction
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      User.update(
+        {
+          ...payload,
+        },
+        {
+          where: query,
+          transaction,
+        }
+      )
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async delete(query: any, transaction?: Transaction): Promise<any> {
+    return new Promise((resolve, reject) => {
+      User.destroy({
+        where: query,
+        transaction,
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export default UserDal;

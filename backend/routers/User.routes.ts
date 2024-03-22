@@ -6,9 +6,9 @@ let router: Router = Router();
 router
   .post("/", UserController.create)
   .get("/", UserController.findAll)
-  .get("/:id", (req, res) => {
-    res.send("Users GET by id route is working ...");
-  })
+  .get("/:id", UserController.findOne)
+  .put("/", UserController.update)
+  .put("/:id", UserController.update)
   .post("/login", (req, res) => {
     res.send("Users Login route is working ...");
   })
@@ -18,8 +18,6 @@ router
   .put("/change-pwd", (req, res) => {
     res.send("Users Change Password route is working ...");
   })
-  .delete("/", (req, res) => {
-    res.send("Users DELETE route is working ...");
-  });
+  .delete("/:id", UserController.delete);
 
 export default router;
