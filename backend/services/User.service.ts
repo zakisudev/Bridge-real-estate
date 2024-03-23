@@ -56,6 +56,16 @@ class UserService {
     });
   }
 
+  public static findByEmail(query: any): Promise<User> {
+    return new Promise((resolve, reject) => {
+      UserDal.findByEmail(query)
+        .then((result: any) => resolve(result))
+        .catch((error: any) => {
+          reject(new Error(error));
+        });
+    });
+  }
+
   static async update(id: string, payload: User): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let query = { id: id || payload.id };

@@ -49,6 +49,26 @@ class UserDal {
     });
   }
 
+  static findByEmail(value: any) {
+    return new Promise((resolve, reject) => {
+      User.findOne({
+        where: { email: value },
+      })
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
+    });
+  }
+
+  static findAuth(query: any): Promise<User | null> {
+    return new Promise((resolve, reject) => {
+      User.findOne({
+        where: query,
+      })
+        .then((result) => resolve(result))
+        .catch((error) => reject(error));
+    });
+  }
+
   static async update(
     query: any,
     payload: User,
