@@ -1,17 +1,21 @@
 import { Router } from "express";
 import UserController from "../controllers/User.controller";
+import {
+  authentication,
+  generateAccessToken,
+  response,
+  authHeader,
+} from "../middlewares/Auth";
 
 let router: Router = Router();
 
 router
   .post("/", UserController.create)
-  .get("/", UserController.findAll)
-  .get("/:id", UserController.findOne)
-  .put("/", UserController.update)
-  .put("/:id", UserController.update)
-  .post("/login", (req, res) => {
-    res.send("Users Login route is working ...");
-  })
+  .get("/", authHeader, UserController.findAll)
+  .get("/:id", authHeader, UserController.findOne)
+  .put("/", authHeader, UserController.update)
+  .put("/:id", authHeader, UserController.update)
+  .post("/login", authentication, generateAccessToken, response)
   .put("/reset", (req, res) => {
     res.send("Users Reset route is working ...");
   })

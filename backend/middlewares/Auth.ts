@@ -1,8 +1,47 @@
 import { NextFunction, Request, Response } from "express";
+import passportConfig from "../utilities/passport/passport";
 import jsonwebtoken from "jsonwebtoken";
-import { decode } from "punycode";
+import UserDal from "../dals/User.dal";
+import passport from "passport";
+import { User } from "../models";
 
-let authHeader = (req: any, res: Response, next: NextFunction) => {
+let authentication = (request: Request, response: Response, next: Function) => {
+  if (!request.body.email) {
+    return response.status(400).json({
+      message: "Email required!",
+    });
+  }
+  if (!request.body.password) {
+    return response.status(400).json({
+      message: "Password required!",
+    });
+  }
+
+  passport.authenticate(
+    "local",
+    { session: false },
+    (error: Error, user: any, info: any) => {
+      if (error) {
+        return response.status(500).send(error);
+      } else if (!user) {
+        return response
+          .status(401)
+          .json({ message: "Login Failed: Invalid Username or password!" });
+      } else {
+        request.logIn(user, { session: false }, (error) => {
+          if (error) {
+            return response
+              .status(401)
+              .json({ message: "Login Failed: Invalid Username or password!" });
+          }
+          next();
+        });
+      }
+    }
+  )(request, response, next);
+};
+
+const authHeader = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -12,7 +51,7 @@ let authHeader = (req: any, res: Response, next: NextFunction) => {
 
   jsonwebtoken.verify(
     token,
-    process.env.ACCESS_TOKEN_SECRET as string,
+    passportConfig.security.secret,
     (err: any, user: any) => {
       if (err) {
         return res.sendStatus(403);
@@ -23,24 +62,37 @@ let authHeader = (req: any, res: Response, next: NextFunction) => {
   );
 };
 
-export const generateAccessToken = (
-  req: any,
-  res: Response,
-  next: NextFunction
-) => {
+const response = (req: any, res: Response) => {
   let user = req.user;
 
-  req.token = jsonwebtoken.sign(
+  UserDal.findAuth({ id: user.id });
+  res.status(200).json({
+    token: req.token,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    is_admin: user.is_admin,
+    phone: user.phone,
+  });
+};
+
+let generateAccessToken = (request: any, response: any, next: Function) => {
+  let user: User = request.user;
+
+  request.token = jsonwebtoken.sign(
     {
       id: user.id,
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
+      is_admin: user.is_admin,
     },
-    process.env.ACCESS_TOKEN_SECRET as string,
-    {
-      expiresIn: "1800s",
-    }
+    passportConfig.security.secret
   );
+
   next();
 };
 
-export default authHeader;
+export { authHeader, generateAccessToken, authentication, response };
