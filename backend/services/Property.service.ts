@@ -22,6 +22,17 @@ class PropertyService {
       }
     });
   }
+
+  static async findAll(query: any): Promise<Property[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const properties = await PropertyDal.findAll(query);
+        resolve(properties);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 export default PropertyService;

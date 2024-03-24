@@ -38,6 +38,18 @@ class PropertyController {
       res.status(400).json({ message: errors });
     }
   }
+
+  static async findAll(req: Request, res: Response) {
+    const query = req.query;
+
+    PropertyService.findAll(query)
+      .then((result: Property[]) => {
+        res.status(200).json(result);
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
 }
 
 export default PropertyController;

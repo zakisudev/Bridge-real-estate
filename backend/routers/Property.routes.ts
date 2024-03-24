@@ -5,9 +5,7 @@ import { authHeader } from "../middlewares/Auth";
 let router: Router = Router();
 
 router
-  .get("/", (req, res) => {
-    res.send("Property GET route is working ...");
-  })
+  .get("/", PropertyController.findAll)
   .get("/:id", (req, res) => {
     res.send("Property GET by id route is working ...");
   })
