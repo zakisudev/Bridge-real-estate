@@ -8,6 +8,7 @@ const MODEL = (sequelize: Sequelize) => {
 
   User.hasMany(Property, {
     foreignKey: "user_id",
+    onDelete: "CASCADE",
   });
   Property.belongsTo(User, {
     foreignKey: "user_id",
