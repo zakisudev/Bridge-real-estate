@@ -64,6 +64,21 @@ class PropertyService {
       }
     });
   }
+
+  static async delete(id: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const propertyExist = await PropertyDal.findOne(id);
+        if (!propertyExist) {
+          throw new Error("Property not found.");
+        }
+        await PropertyDal.delete(id);
+        resolve({ success: true, message: "Property deleted successfully." });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 export default PropertyService;

@@ -84,6 +84,18 @@ class PropertyController {
       res.status(400).json({ message: errors });
     }
   }
+
+  static async delete(req: Request, res: Response) {
+    const id = req.params.id;
+
+    PropertyService.delete(id)
+      .then((result: Property) => {
+        res.status(200).json(result);
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
 }
 
 export default PropertyController;

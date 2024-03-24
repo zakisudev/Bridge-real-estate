@@ -116,6 +116,18 @@ class PropertyDal {
         });
     });
   }
+
+  static async delete(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      Property.destroy({ where: { id } })
+        .then((result) => {
+          resolve({ success: true, message: "Property deleted successfully." });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export default PropertyDal;
