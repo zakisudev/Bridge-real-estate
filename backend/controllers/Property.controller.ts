@@ -62,6 +62,40 @@ class PropertyController {
         res.status(400).json({ message: error.message });
       });
   }
+
+  static async update(req: Request, res: Response) {
+    const Schema = new evalidate.schema({
+      id: evalidate.number().required(),
+    });
+    const result = Schema.validate(req.body);
+    if (result.isValid) {
+      PropertyService.update(req.body.id, req.body)
+        .then((result: Property) => {
+          res.status(200).json(result);
+        })
+        .catch((error: Error) => {
+          res.status(400).json({ message: error.message });
+        });
+    } else {
+      let errors: any = {};
+      result.errors.forEach((err: any) => {
+        errors[err.field] = err.message;
+      });
+      res.status(400).json({ message: errors });
+    }
+  }
+
+  static async delete(req: Request, res: Response) {
+    const id = req.params.id;
+
+    PropertyService.delete(id)
+      .then((result: Property) => {
+        res.status(200).json(result);
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
 }
 
 export default PropertyController;

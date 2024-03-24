@@ -1,6 +1,7 @@
 import { Transaction } from "sequelize";
 import { Property } from "../models";
 import { User } from "../models/User";
+import { title } from "process";
 
 class PropertyDal {
   static async create(
@@ -42,6 +43,7 @@ class PropertyDal {
             ],
           },
         ],
+        order: [["createdAt", "DESC"]],
       })
         .then((result) => {
           resolve(result);
@@ -73,6 +75,53 @@ class PropertyDal {
       })
         .then((result) => {
           resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async update(
+    id: string,
+    payload: Property,
+    transaction?: Transaction
+  ): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const updatedProperty = {
+        title: payload.title,
+        description: payload.description,
+        address: payload.address,
+        bathrooms: payload.bathrooms,
+        bedrooms: payload.bedrooms,
+        furnished: payload.furnished,
+        parking: payload.parking,
+        size: payload.size,
+        discountedPrice: payload.discountedPrice,
+        regularPrice: payload.regularPrice,
+        type: payload.type,
+        offer: payload.offer,
+        imageUrls: payload.imageUrls,
+      };
+      Property.update(updatedProperty, {
+        where: { id },
+        returning: true,
+        transaction,
+      })
+        .then((result) => {
+          resolve({ success: true, data: payload });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async delete(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      Property.destroy({ where: { id } })
+        .then((result) => {
+          resolve({ success: true, id: id });
         })
         .catch((error) => {
           reject(error);

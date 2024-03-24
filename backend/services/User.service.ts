@@ -73,7 +73,7 @@ class UserService {
       try {
         await UserDal.update(query, payload, transaction);
         await transaction.commit();
-        resolve({ success: true, message: "User updated successfully." });
+        resolve({ success: true, data: payload });
       } catch (error) {
         await transaction.rollback();
         reject(error);
@@ -88,8 +88,7 @@ class UserService {
       try {
         await UserDal.delete(query, transaction);
         await transaction.commit();
-        resolve({ success: true, message: "User deleted successfully." });
-        return { success: true, message: "User deleted successfully." };
+        resolve({ success: true, id: id });
       } catch (error) {
         await transaction.rollback();
         reject(error);
