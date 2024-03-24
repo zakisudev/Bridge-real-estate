@@ -2,6 +2,7 @@ import { Request } from "express";
 import PropertyDal from "../dals/Property.dal";
 import { Property } from "../models";
 import { createTransaction } from "../utilities/database/sequelize";
+import { Transaction } from "sequelize";
 
 class PropertyService {
   static async create(payload: Property, req?: Request): Promise<any> {
@@ -38,6 +39,25 @@ class PropertyService {
     return new Promise(async (resolve, reject) => {
       try {
         const property = await PropertyDal.findOne(id);
+        resolve(property);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  static async update(
+    id: string,
+    payload: Property,
+    transaction?: Transaction
+  ): Promise<Property> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const propertyExist = await PropertyDal.findOne(id);
+        if (!propertyExist) {
+          throw new Error("Property not found.");
+        }
+        const property = await PropertyDal.update(id, payload, transaction);
         resolve(property);
       } catch (error) {
         reject(error);

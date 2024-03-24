@@ -8,9 +8,7 @@ router
   .get("/", PropertyController.findAll)
   .get("/:id", PropertyController.findById)
   .post("/", authHeader, PropertyController.create)
-  .put("/:id", (req, res) => {
-    res.send("Property PUT route is working ...");
-  })
+  .put("/", authHeader, PropertyController.update)
   .delete("/:id", (req, res) => {
     res.send("Property DELETE route is working ...");
   });
