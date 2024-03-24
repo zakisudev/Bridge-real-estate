@@ -3,6 +3,7 @@ import { User } from "../models";
 import { createTransaction } from "../utilities/database/sequelize";
 import UserDal from "../dals/User.dal";
 import { resolve } from "path";
+import { hashPassword } from "../utilities/helper/helper";
 
 class UserService {
   static create(payload: User): Promise<any> {
@@ -71,9 +72,24 @@ class UserService {
       let query = { id: id || payload.id };
       const transaction = await createTransaction();
       try {
+        const pwd = payload.password;
+        if (pwd) {
+          payload.password = await hashPassword(payload.password);
+        }
         await UserDal.update(query, payload, transaction);
         await transaction.commit();
-        resolve({ success: true, data: payload });
+        resolve({
+          success: true,
+          data: {
+            id: payload.id,
+            username: payload.username,
+            firstName: payload.firstName,
+            lastName: payload.lastName,
+            phone: payload.phone,
+            email: payload.email,
+            is_admin: payload.is_admin,
+          },
+        });
       } catch (error) {
         await transaction.rollback();
         reject(error);

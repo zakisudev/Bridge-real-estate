@@ -63,13 +63,12 @@ class UserController {
   }
 
   static async update(req: Request, res: Response) {
-    const id = req.params.id;
     const Schema = new evalidate.schema({
       id: evalidate.number().required(),
     });
     const result = Schema.validate(req.body);
     if (result.isValid) {
-      UserService.update(id, req.body)
+      UserService.update(req.body.id, req.body)
         .then((result: User) => {
           res.status(200).json(result);
         })
