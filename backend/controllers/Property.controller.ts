@@ -50,6 +50,18 @@ class PropertyController {
         res.status(400).json({ message: error.message });
       });
   }
+
+  static async findById(req: Request, res: Response) {
+    const id = req.params.id;
+
+    PropertyService.findById(id)
+      .then((result: Property) => {
+        res.status(200).json(result);
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
 }
 
 export default PropertyController;

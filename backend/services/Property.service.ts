@@ -33,6 +33,17 @@ class PropertyService {
       }
     });
   }
+
+  static async findById(id: string): Promise<Property> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const property = await PropertyDal.findOne(id);
+        resolve(property);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 }
 
 export default PropertyService;

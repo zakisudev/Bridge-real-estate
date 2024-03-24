@@ -6,9 +6,7 @@ let router: Router = Router();
 
 router
   .get("/", PropertyController.findAll)
-  .get("/:id", (req, res) => {
-    res.send("Property GET by id route is working ...");
-  })
+  .get("/:id", PropertyController.findById)
   .post("/", authHeader, PropertyController.create)
   .put("/:id", (req, res) => {
     res.send("Property PUT route is working ...");

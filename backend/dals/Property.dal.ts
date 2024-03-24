@@ -51,6 +51,34 @@ class PropertyDal {
         });
     });
   }
+
+  static async findOne(query: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      Property.findByPk(query, {
+        include: [
+          {
+            model: User,
+            as: "user",
+            attributes: [
+              "id",
+              "username",
+              "firstName",
+              "lastName",
+              "email",
+              "phone",
+              "is_admin",
+            ],
+          },
+        ],
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
 
 export default PropertyDal;
