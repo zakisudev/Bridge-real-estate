@@ -14,7 +14,8 @@ export class Property extends Model {
   public regularPrice!: number;
   public type!: string;
   public offer!: string;
-  public imageUrls!: string[];
+  public imageUrls!: any[];
+  public user_id!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -77,7 +78,21 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       imageUrls: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+        allowNull: false,
+        get() {
+          return this.getDataValue("imageUrls")
+            ? JSON.parse(this.getDataValue("imageUrls"))
+            : [];
+        },
+        set(value: any) {
+          if (value) {
+            this.setDataValue("imageUrls", JSON.stringify(value));
+          }
+        },
+      },
+      user_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
       },
     },
