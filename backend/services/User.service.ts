@@ -9,9 +9,21 @@ class UserService {
     return new Promise(async (resolve, reject) => {
       const transaction = await createTransaction();
       try {
-        await UserDal.create(payload, transaction);
+        const res = await UserDal.create(payload, transaction);
         await transaction.commit();
-        resolve({ success: true, message: "User created successfully." });
+        resolve({
+          user: {
+            id: res.id,
+            username: res.username,
+            firstName: res.firstName,
+            lastName: res.lastName,
+            phone: res.phone,
+            email: res.email,
+            is_admin: res.is_admin,
+          },
+          success: true,
+          message: "User created successfully.",
+        });
       } catch (error) {
         await transaction.rollback();
         reject(error);
