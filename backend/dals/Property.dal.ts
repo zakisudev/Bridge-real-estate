@@ -109,7 +109,7 @@ class PropertyDal {
         transaction,
       })
         .then((result) => {
-          resolve({ success: true, result: "Property updated successfully." });
+          resolve({ success: true, data: payload });
         })
         .catch((error) => {
           reject(error);
@@ -121,7 +121,7 @@ class PropertyDal {
     return new Promise((resolve, reject) => {
       Property.destroy({ where: { id } })
         .then((result) => {
-          resolve({ success: true, message: "Property deleted successfully." });
+          resolve({ success: true, id: id });
         })
         .catch((error) => {
           reject(error);

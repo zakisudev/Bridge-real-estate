@@ -16,7 +16,7 @@ class PropertyService {
         payload.user_id = user.id;
         await PropertyDal.create(payload, transaction);
         await transaction.commit();
-        resolve({ success: true, message: "Property created successfully." });
+        resolve({ success: true, data: payload });
       } catch (error) {
         await transaction.rollback();
         reject(error);
@@ -73,7 +73,7 @@ class PropertyService {
           throw new Error("Property not found.");
         }
         await PropertyDal.delete(id);
-        resolve({ success: true, message: "Property deleted successfully." });
+        resolve({ success: true, id });
       } catch (error) {
         reject(error);
       }
