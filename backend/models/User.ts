@@ -55,7 +55,7 @@ export default (sequelize: Sequelize) => {
     {
       sequelize,
       tableName: "users",
-      modelName: "User",
+      modelName: "user",
       hooks: {
         beforeCreate: async (user: any) => {
           user.password = await hashPassword(user.password);
