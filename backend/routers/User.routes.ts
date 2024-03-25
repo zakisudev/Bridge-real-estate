@@ -15,14 +15,7 @@ router
   .get("/get-paged", authHeader, UserController.getPaged)
   .get("/:id", authHeader, UserController.findOne)
   .put("/", authHeader, UserController.update)
-  .put("/:id", authHeader, UserController.update)
   .post("/login", authentication, generateAccessToken, response)
-  .put("/reset", (req, res) => {
-    res.send("Users Reset route is working ...");
-  })
-  .put("/change-pwd", (req, res) => {
-    res.send("Users Change Password route is working ...");
-  })
   .delete("/:id", UserController.delete);
 
 export default router;
