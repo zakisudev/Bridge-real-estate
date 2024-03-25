@@ -12,6 +12,7 @@ let router: Router = Router();
 router
   .post("/", UserController.create)
   .get("/", authHeader, UserController.findAll)
+  .get("/get-paged", authHeader, UserController.getPaged)
   .get("/:id", authHeader, UserController.findOne)
   .put("/", authHeader, UserController.update)
   .put("/:id", authHeader, UserController.update)
