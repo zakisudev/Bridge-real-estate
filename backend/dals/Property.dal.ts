@@ -117,6 +117,34 @@ class PropertyDal {
     });
   }
 
+  static async getCount(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      Property.count()
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async getPaged(page: number, limit: number): Promise<Property[]> {
+    return new Promise((resolve, reject) => {
+      Property.findAll({
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [["createdAt", "DESC"]],
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   static async delete(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       Property.destroy({ where: { id } })

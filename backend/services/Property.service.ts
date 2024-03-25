@@ -65,6 +65,32 @@ class PropertyService {
     });
   }
 
+  static async getPagedWithCount(
+    page: number,
+    limit: number
+  ): Promise<{ properties: Property[]; count: number }> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const properties = await PropertyDal.getPaged(page, limit);
+        const count = await PropertyDal.getCount();
+        resolve({ properties, count });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  static async getPaged(page: number, limit: number): Promise<Property[]> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const properties = await PropertyDal.getPaged(page, limit);
+        resolve(properties);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   static async delete(id: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       try {
