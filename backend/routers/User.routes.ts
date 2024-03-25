@@ -16,6 +16,7 @@ router
   .get("/:id", authHeader, UserController.findOne)
   .put("/", authHeader, UserController.update)
   .post("/login", authentication, generateAccessToken, response)
+  .post("/logout", authHeader, UserController.logout)
   .delete("/:id", UserController.delete);
 
 export default router;

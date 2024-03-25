@@ -110,6 +110,10 @@ class UserController {
       });
   }
 
+  static async logout(req: Request, res: Response) {
+    return res.status(200).json({ status: "success" });
+  }
+
   static async delete(req: Request, res: Response) {
     const id = req.params.id;
     UserService.delete(id)
