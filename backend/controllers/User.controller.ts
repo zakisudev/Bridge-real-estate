@@ -111,7 +111,13 @@ class UserController {
   }
 
   static async logout(req: Request, res: Response) {
-    return res.status(200).json({ status: "success" });
+    try {
+      if (req.headers.authorization) {
+        return res.status(200).json({ status: "success" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
   }
 
   static async delete(req: Request, res: Response) {
