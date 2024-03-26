@@ -107,7 +107,7 @@ const deleteUserProfile = async () => {
 // Property API calls
 const fetchProperties = async (search: string) => {
   try {
-    const response = await axios.get(`${API_URL}/prop?${search}`);
+    const response = await axios.get(`${API_URL}/prop${search}`);
     return response?.data;
   } catch (error) {
     return error;

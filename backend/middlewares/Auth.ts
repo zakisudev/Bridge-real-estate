@@ -67,6 +67,7 @@ const response = (req: any, res: Response) => {
 
   UserDal.findAuth({ id: user.id });
   res.status(200).json({
+    id: user.id,
     token: req.token,
     username: user.username,
     firstName: user.firstName,
