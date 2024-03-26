@@ -97,6 +97,21 @@ class UserService {
     });
   }
 
+  static async getPagedWithCount(
+    page: number,
+    limit: number
+  ): Promise<{ user: User[]; count: number }> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const users = await UserDal.getPaged(page, limit);
+        const count = await UserDal.getCount();
+        resolve({ user: users, count: count });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   static async delete(id: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let query = { id: id };

@@ -85,6 +85,33 @@ class PropertyController {
     }
   }
 
+  static async getPaged(req: Request, res: Response) {
+    const { page: pageQuery, limit: limitQuery } = req.query;
+    const page = Number(pageQuery) || 1;
+    const limit = Number(limitQuery) || 9;
+
+    PropertyService.getPagedWithCount(page, limit)
+      .then(({ properties, count }) => {
+        const totalPages = Math.ceil(count / limit);
+        const prevPage = page > 1 ? page - 1 : null;
+        const nextPage = page < totalPages ? page + 1 : null;
+        res.status(200).json({
+          properties,
+          pagination: {
+            totalPages,
+            prevPage,
+            nextPage,
+            totalItems: count,
+            currentPage: page,
+            pageSize: limit,
+          },
+        });
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
+
   static async delete(req: Request, res: Response) {
     const id = req.params.id;
 

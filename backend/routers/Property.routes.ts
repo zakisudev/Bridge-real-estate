@@ -6,6 +6,7 @@ let router: Router = Router();
 
 router
   .get("/", PropertyController.findAll)
+  .get("/get-paged", PropertyController.getPaged)
   .get("/:id", PropertyController.findById)
   .post("/", authHeader, PropertyController.create)
   .put("/", authHeader, PropertyController.update)
