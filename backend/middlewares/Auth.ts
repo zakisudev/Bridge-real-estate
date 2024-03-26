@@ -46,7 +46,7 @@ const authHeader = (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.sendStatus(401);
+    return res.status(401).json({ message: "Access denied", success: false });
   }
 
   jsonwebtoken.verify(
@@ -54,7 +54,9 @@ const authHeader = (req: Request, res: Response, next: NextFunction) => {
     passportConfig.security.secret,
     (err: any, user: any) => {
       if (err) {
-        return res.sendStatus(403);
+        return res
+          .status(403)
+          .json({ message: "Invalid token", success: false });
       }
       req.user = user;
       next();

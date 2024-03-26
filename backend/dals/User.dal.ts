@@ -93,6 +93,34 @@ class UserDal {
     });
   }
 
+  static async getPaged(page: number, limit: number): Promise<User[]> {
+    return new Promise((resolve, reject) => {
+      User.findAll({
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [["createdAt", "DESC"]],
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  static async getCount(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      User.count()
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
   static async delete(query: any, transaction?: Transaction): Promise<any> {
     return new Promise((resolve, reject) => {
       User.destroy({

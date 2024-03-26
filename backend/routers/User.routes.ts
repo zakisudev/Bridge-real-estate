@@ -12,9 +12,11 @@ let router: Router = Router();
 router
   .post("/", UserController.create)
   .get("/", authHeader, UserController.findAll)
+  .get("/get-paged", authHeader, UserController.getPaged)
   .get("/:id", authHeader, UserController.findOne)
   .put("/", authHeader, UserController.update)
   .post("/login", authentication, generateAccessToken, response)
+  .post("/logout", authHeader, UserController.logout)
   .delete("/:id", UserController.delete);
 
 export default router;

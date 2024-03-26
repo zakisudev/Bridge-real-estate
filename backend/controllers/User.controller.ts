@@ -84,6 +84,42 @@ class UserController {
     }
   }
 
+  static async getPaged(req: Request, res: Response) {
+    const { page: pageQuery, limit: limitQuery } = req.query;
+    const page = Number(pageQuery) || 1;
+    const limit = Number(limitQuery) || 9;
+    UserService.getPagedWithCount(page, limit)
+      .then(({ user, count }) => {
+        const totalPages = Math.ceil(count / limit);
+        const prevPage = page > 1 ? page - 1 : null;
+        const nextPage = page < totalPages ? page + 1 : null;
+        res.status(200).json({
+          user,
+          pagination: {
+            totalPages,
+            prevPage,
+            nextPage,
+            totalItems: count,
+            currentPage: page,
+            pageSize: limit,
+          },
+        });
+      })
+      .catch((error: Error) => {
+        res.status(400).json({ message: error.message });
+      });
+  }
+
+  static async logout(req: Request, res: Response) {
+    try {
+      if (req.headers.authorization) {
+        return res.status(200).json({ status: "success" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
   static async delete(req: Request, res: Response) {
     const id = req.params.id;
     UserService.delete(id)
