@@ -1,4 +1,4 @@
-import { UserRegister } from "../interfaces/userInterface";
+import { UserLogin, UserRegister } from "../interfaces/userInterface";
 import authTypes from "./authTypes";
 
 export const registerUser = (user: UserRegister) => {
@@ -8,7 +8,7 @@ export const registerUser = (user: UserRegister) => {
   };
 };
 
-export const loginUser = (user: UserRegister) => {
+export const loginUser = (user: UserLogin) => {
   return {
     type: authTypes.LOGIN_USER,
     payload: user,

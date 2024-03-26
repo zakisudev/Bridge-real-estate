@@ -3,6 +3,7 @@ import { PropertyState } from "../interfaces/propertyInterface";
 
 const initialState: PropertyState = {
   properties: [],
+  property: null,
   loading: false,
   error: null,
 };
@@ -37,7 +38,7 @@ const propertySlice = createSlice({
 
     setProperty(state, action) {
       state.loading = false;
-      state.properties = action.payload;
+      state.property = action.payload;
     },
 
     addProperty(state) {

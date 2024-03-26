@@ -1,7 +1,7 @@
 import { takeLatest, put, call } from "redux-saga/effects";
 import AuthActionType from "./authTypes";
 import { UserRegister } from "../interfaces/userInterface";
-import { AuthResponse } from "../interfaces/authInterface";
+import { AuthResponse, RegisterResponse } from "../interfaces/authInterface";
 import {
   registerUser as REGISTER,
   loginUser as LOGIN,
@@ -21,8 +21,13 @@ import {
 function* registerUserSaga(action: { type: string; payload: UserRegister }) {
   try {
     yield put(registerUser());
-    const response: AuthResponse = yield call(REGISTER, action.payload);
-    yield put(registerUserSuccess(response));
+    const user: RegisterResponse = yield call(REGISTER, action.payload);
+
+    if (user?.name === "AxiosError") {
+      yield put(registerUserFailure(user.response.data));
+      return;
+    }
+    yield put(registerUserSuccess(user));
   } catch (error) {
     yield put(registerUserFailure(error));
   }
@@ -31,8 +36,13 @@ function* registerUserSaga(action: { type: string; payload: UserRegister }) {
 function* loginUserSaga(action: { type: string; payload: UserRegister }) {
   try {
     yield put(loginUser());
-    const response: AuthResponse = yield call(LOGIN, action.payload);
-    yield put(loginUserSuccess(response));
+    const auth: AuthResponse = yield call(LOGIN, action.payload);
+
+    if (auth?.name === "AxiosError") {
+      yield put(loginUserFailure(auth.response.data?.message));
+      return;
+    }
+    yield put(loginUserSuccess(auth));
   } catch (error) {
     yield put(loginUserFailure(error));
   }

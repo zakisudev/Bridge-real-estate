@@ -29,10 +29,13 @@ import {
   deletePropertyFailed,
 } from "./propertyReducer";
 
-function* getPropertiesSaga() {
+function* getPropertiesSaga(search: { type: string; payload: string }) {
   try {
     yield put(getProperties());
-    const response: PropertyResponse = yield call(fetchProperties);
+    const response: PropertyResponse = yield call(
+      fetchProperties,
+      search.payload
+    );
     yield put(setProperties(response));
   } catch (error) {
     yield put(getPropertiesFailed(error));

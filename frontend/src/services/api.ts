@@ -6,7 +6,7 @@ import { PropertyModel } from "../redux/interfaces/propertyInterface";
 // Auth API calls
 const registerUser = async (user: UserRegister) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/register`, user);
+    const response = await axios.post(`${API_URL}/user`, user);
     return response?.data;
   } catch (error) {
     return error;
@@ -15,7 +15,7 @@ const registerUser = async (user: UserRegister) => {
 
 const loginUser = async (user: UserRegister) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, user);
+    const response = await axios.post(`${API_URL}/user/login`, user);
     return response?.data;
   } catch (error) {
     return error;
@@ -24,7 +24,7 @@ const loginUser = async (user: UserRegister) => {
 
 const logout = async () => {
   try {
-    const response = await axios.post(`${API_URL}/auth/logout`);
+    const response = await axios.post(`${API_URL}/user/logout`);
     return response?.data;
   } catch (error) {
     return error;
@@ -105,9 +105,9 @@ const deleteUserProfile = async () => {
 };
 
 // Property API calls
-const fetchProperties = async () => {
+const fetchProperties = async (search: string) => {
   try {
-    const response = await axios.get(`${API_URL}/prop`);
+    const response = await axios.get(`${API_URL}/prop?${search}`);
     return response?.data;
   } catch (error) {
     return error;
@@ -125,7 +125,12 @@ const fetchProperty = async (id: string) => {
 
 const addProperty = async (property: PropertyModel) => {
   try {
-    const response = await axios.post(`${API_URL}/prop`, property);
+    const response = await axios.post(`${API_URL}/prop`, property, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -134,7 +139,12 @@ const addProperty = async (property: PropertyModel) => {
 
 const updateProperty = async (id: string, property: PropertyModel) => {
   try {
-    const response = await axios.put(`${API_URL}/prop/${id}`, property);
+    const response = await axios.put(`${API_URL}/prop/${id}`, property, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -143,7 +153,11 @@ const updateProperty = async (id: string, property: PropertyModel) => {
 
 const deleteProperty = async (id: string) => {
   try {
-    const response = await axios.delete(`${API_URL}/prop/${id}`);
+    const response = await axios.delete(`${API_URL}/prop/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;

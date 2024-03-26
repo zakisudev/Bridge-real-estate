@@ -8,6 +8,7 @@ interface Errors {
   email: string;
   password: string;
   confirmPassword: string;
+  [key: string]: string | null | undefined;
 }
 
 const validateForm = (user: UserRegister) => {

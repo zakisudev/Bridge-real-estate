@@ -4,13 +4,14 @@ import {
 } from "../interfaces/propertyInterface";
 import propertyTypes from "./propertyTypes";
 
-export const fetchProperties = () => {
+export const fetchProperties = (search: string) => {
   return {
     type: propertyTypes.GET_PROPERTIES,
+    payload: search,
   };
 };
 
-export const fetchProperty = (id: string) => {
+export const fetchProperty = (id: string | undefined) => {
   return {
     type: propertyTypes.GET_PROPERTY,
     payload: id,
