@@ -61,14 +61,10 @@ function* addUserSaga(user: any) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function* updateUserSaga(data: any) {
+function* updateUserSaga(user: any) {
   try {
     yield put(updateUser());
-    const updatedUser: UserModelResponse = yield call(
-      UPDATE,
-      data.id,
-      data.user
-    );
+    const updatedUser: UserModelResponse = yield call(UPDATE, user.payload);
     yield put(updateUserSuccess(updatedUser));
   } catch (error) {
     yield put(updateUserFailure(error));

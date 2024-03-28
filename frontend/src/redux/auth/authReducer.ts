@@ -15,10 +15,9 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    registerUserSuccess(state, action) {
+    registerUserSuccess(state) {
       state.error = null;
       state.loading = false;
-      state.user = action.payload;
     },
     registerUserFailure(state, action) {
       state.loading = false;
@@ -33,6 +32,7 @@ const authSlice = createSlice({
       state.error = null;
       state.loading = false;
       state.user = action.payload;
+      localStorage.setItem("token", JSON.stringify(action.payload.token));
     },
     loginUserFailure(state, action) {
       state.loading = false;

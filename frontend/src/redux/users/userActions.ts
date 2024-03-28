@@ -23,14 +23,15 @@ export const addUser = (user: UserRegister) => {
   };
 };
 
-export const updateUser = (id: string, user: UserRegister) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateUser = (user: any) => {
   return {
     type: userTypes.UPDATE_USER,
-    payload: { id, user },
+    payload: user,
   };
 };
 
-export const deleteUser = (id: string) => {
+export const deleteUser = (id: number) => {
   return {
     type: userTypes.DELETE_USER,
     payload: id,

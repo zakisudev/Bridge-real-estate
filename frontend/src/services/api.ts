@@ -2,6 +2,9 @@ import axios from "axios";
 import API_URL from "../constants";
 import { UserRegister } from "../redux/interfaces/userInterface";
 import { PropertyModel } from "../redux/interfaces/propertyInterface";
+import { AuthResponse } from "../redux/interfaces/authInterface";
+
+const token = JSON.parse(localStorage.getItem("token") as string);
 
 // Auth API calls
 const registerUser = async (user: UserRegister) => {
@@ -59,45 +62,26 @@ const addUser = async (user: UserRegister) => {
   }
 };
 
-const updateUser = async (id: string, user: UserRegister) => {
+const updateUser = async (user: AuthResponse) => {
   try {
-    const response = await axios.put(`${API_URL}/user/${id}`, user);
+    const response = await axios.put(`${API_URL}/user`, user, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
   }
 };
 
-const deleteUser = async (id: string) => {
+const deleteUser = async (id: number) => {
   try {
-    const response = await axios.delete(`${API_URL}/user/${id}`);
-    return response?.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const getUserProfile = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/user/profile`);
-    return response?.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const updateUserProfile = async (user: UserRegister) => {
-  try {
-    const response = await axios.put(`${API_URL}/user/profile`, user);
-    return response?.data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const deleteUserProfile = async () => {
-  try {
-    const response = await axios.delete(`${API_URL}/user/profile`);
+    const response = await axios.delete(`${API_URL}/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -105,9 +89,9 @@ const deleteUserProfile = async () => {
 };
 
 // Property API calls
-const fetchProperties = async (search: string) => {
+const fetchProperties = async (page: string) => {
   try {
-    const response = await axios.get(`${API_URL}/prop${search}`);
+    const response = await axios.get(`${API_URL}/prop/get-paged${page}`);
     return response?.data;
   } catch (error) {
     return error;
@@ -127,35 +111,33 @@ const addProperty = async (property: PropertyModel) => {
   try {
     const response = await axios.post(`${API_URL}/prop`, property, {
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data;
+    return response?.data?.data;
   } catch (error) {
     return error;
   }
 };
 
-const updateProperty = async (id: string, property: PropertyModel) => {
+const updateProperty = async (property: PropertyModel) => {
   try {
-    const response = await axios.put(`${API_URL}/prop/${id}`, property, {
+    const response = await axios.put(`${API_URL}/prop`, property, {
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data;
+    return response?.data?.data;
   } catch (error) {
     return error;
   }
 };
 
-const deleteProperty = async (id: string) => {
+const deleteProperty = async (id: number) => {
   try {
     const response = await axios.delete(`${API_URL}/prop/${id}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     return response?.data;
@@ -173,9 +155,6 @@ export {
   addUser,
   updateUser,
   deleteUser,
-  getUserProfile,
-  updateUserProfile,
-  deleteUserProfile,
   fetchProperties,
   fetchProperty,
   addProperty,

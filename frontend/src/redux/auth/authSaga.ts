@@ -6,6 +6,7 @@ import {
   registerUser as REGISTER,
   loginUser as LOGIN,
   logout as LOGOUT,
+  deleteUser as DELETE,
 } from "../../services/api";
 import {
   registerUser,
@@ -27,7 +28,7 @@ function* registerUserSaga(action: { type: string; payload: UserRegister }) {
       yield put(registerUserFailure(user.response.data));
       return;
     }
-    yield put(registerUserSuccess(user));
+    yield put(registerUserSuccess());
   } catch (error) {
     yield put(registerUserFailure(error));
   }
@@ -39,7 +40,7 @@ function* loginUserSaga(action: { type: string; payload: UserRegister }) {
     const auth: AuthResponse = yield call(LOGIN, action.payload);
 
     if (auth?.name === "AxiosError") {
-      yield put(loginUserFailure(auth.response.data?.message));
+      yield put(loginUserFailure(auth.response?.data?.message));
       return;
     }
     yield put(loginUserSuccess(auth));
@@ -57,8 +58,19 @@ function* logoutUserSaga() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function* deleteUserAccount(action: any) {
+  try {
+    yield call(DELETE, action.payload);
+    yield put(logoutUser());
+  } catch (error) {
+    yield put(logoutUserError(error));
+  }
+}
+
 export default function* watchAuthSaga() {
   yield takeLatest(AuthActionType.REGISTER_USER, registerUserSaga);
   yield takeLatest(AuthActionType.LOGIN_USER, loginUserSaga);
   yield takeLatest(AuthActionType.LOGOUT_USER, logoutUserSaga);
+  yield takeLatest(AuthActionType.DELETE_USER, deleteUserAccount);
 }
