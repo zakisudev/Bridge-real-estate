@@ -9,7 +9,6 @@ import {
   deleteUser as DELETE,
 } from "../../services/api";
 import {
-  registerUser,
   registerUserSuccess,
   registerUserFailure,
   loginUser,
@@ -17,6 +16,7 @@ import {
   loginUserFailure,
   logoutUser,
   logoutUserError,
+  registerUser,
 } from "./authReducer";
 
 function* registerUserSaga(action: { type: string; payload: UserRegister }) {
@@ -28,7 +28,7 @@ function* registerUserSaga(action: { type: string; payload: UserRegister }) {
       yield put(registerUserFailure(user.response.data));
       return;
     }
-    yield put(registerUserSuccess());
+    if (user?.success) yield put(registerUserSuccess());
   } catch (error) {
     yield put(registerUserFailure(error));
   }

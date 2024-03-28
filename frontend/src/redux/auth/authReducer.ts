@@ -41,11 +41,13 @@ const authSlice = createSlice({
 
     logoutUser(state) {
       state.user = null;
+      state.loading = false;
       localStorage.clear();
     },
 
     logoutUserError(state, action) {
       state.error = action.payload;
+      state.loading = false;
     },
   },
 });

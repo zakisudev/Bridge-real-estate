@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RootState } from "../redux/rootReducer";
-import { deleteUser, updateUser } from "../redux/users/userActions";
+import { deleteUser } from "../services/api";
+import { updateUser } from "../services/api";
 import { AuthResponse } from "../redux/interfaces/authInterface";
 import Header from "../components/Header";
 import Loader from "../components/Loader";
 import { logoutUser } from "../redux/auth/authActions";
+import { registerUser as LOGOUT } from "../redux/auth/authReducer";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -38,39 +40,40 @@ const Profile = () => {
         }
 
         if (formData?.password) {
-          dispatch(updateUser(formData));
+          dispatch(LOGOUT());
+          const res = await updateUser(formData);
           if (loading && !error) {
             return (
               <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
                 <Loader />
               </div>
             );
-          } else if (user && !loading && !error) {
-            toast.success("Profile updated successfully");
+          } else if (!loading && error) {
+            toast.success(error);
             dispatch(logoutUser());
             return;
+          } else if (res.success) {
+            toast.success("Profile updated successfully");
+            dispatch(logoutUser());
+            navigate("/login");
           }
         } else {
-          dispatch(
-            updateUser({
-              id: user?.id,
-              username: formData?.username,
-              firstName: formData?.firstName,
-              lastName: formData?.lastName,
-              email: formData?.email,
-              phone: formData?.phone,
-              is_admin: user?.is_admin,
-            })
-          );
-          if (user && loading && !error) {
+          dispatch(LOGOUT());
+          const res = await updateUser(formData);
+          if (loading && !error) {
             return (
               <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
                 <Loader />
               </div>
             );
-          } else if (user && !loading && !error) {
+          } else if (!loading && error) {
+            toast.success(error);
+            dispatch(logoutUser());
+            return;
+          } else if (res.success) {
             toast.success("Profile updated successfully");
             dispatch(logoutUser());
+            navigate("/login");
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -95,12 +98,12 @@ const Profile = () => {
     }
     if (user && user.id) {
       try {
-        dispatch(deleteUser(user?.id ?? 0));
-        if (!loading && !error) {
+        dispatch(LOGOUT());
+        const res = await deleteUser(user.id);
+        if (res?.success && !loading && !error) {
+          dispatch(logoutUser());
           toast.success("Account deleted successfully");
           navigate("/login");
-        } else {
-          toast.error("Something went wrong");
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
@@ -116,6 +119,12 @@ const Profile = () => {
 
   return (
     <>
+      {loading && (
+        <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
+          <Loader />
+        </div>
+      )}
+
       <Header />
       <div className="w-full sm:w-[90%] min-h-full px-3 flex flex-col justify-center items-center mx-auto">
         <div className="h-full flex gap-5 flex-col w-[90%] sm:flex-row sm:max-h-[500px]">

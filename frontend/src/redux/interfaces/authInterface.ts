@@ -28,6 +28,7 @@ export interface RegisterResponse {
     phone: string | undefined;
     is_admin: boolean | undefined;
   };
+  success: boolean;
   name: string;
   response: {
     data: {

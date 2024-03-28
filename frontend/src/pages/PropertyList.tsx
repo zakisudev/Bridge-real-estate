@@ -32,27 +32,27 @@ const PropertyList = () => {
               {properties &&
                 properties?.map((props) => (
                   <Link
-                    to={`/prop/${props.id}`}
-                    key={props.id}
+                    to={`/prop/${props?.id}`}
+                    key={props?.id}
                     className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
                   >
                     <img
-                      src={props.imageUrls[0]}
-                      alt={props.title}
+                      src={props?.imageUrls[0]}
+                      alt={props?.title}
                       className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
                     />
                     <div className="flex flex-col gap-1 p-3">
-                      <h1 className="text-lg font-semibold">{props.title}</h1>
+                      <h1 className="text-lg font-semibold">{props?.title}</h1>
                       <p className="flex gap-1 items-center  text-green-700">
                         <DownOutlined />
                         <span className="text-gray-700">{props?.address}</span>
                       </p>
                       <p className="text-sm text-gray-500">
-                        {props.description.substring(0, 100)}...
+                        {props?.description.substring(0, 100)}...
                       </p>
                       <div className="flex justify-between items-center">
                         <h1 className="text-lg font-semibold">
-                          ${props.regularPrice.toLocaleString("en-US")}
+                          ${props?.regularPrice.toLocaleString("en-US")}
                           {props?.type === "rent" ? " / mo" : ""}
                         </h1>
                       </div>

@@ -3,8 +3,10 @@ import validateForm from "../utils/validator";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "../redux/auth/authActions";
 import { RootState } from "../redux/rootReducer";
+import { addUser } from "../services/api";
+import { registerUserSuccess } from "../redux/auth/authReducer";
+import { registerUser } from "../redux/auth/authReducer";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -54,12 +56,19 @@ const Register = () => {
       }
     }
     try {
-      dispatch(registerUser(user));
-      toast.success("User registered successfully");
-      navigate("/login", {
-        replace: true,
-        state: { email: user.email, password: user.password },
-      });
+      dispatch(registerUser());
+      const res = await addUser(user);
+      if (res?.success) {
+        toast.success("User registered successfully");
+        dispatch(registerUserSuccess());
+        navigate("/login", {
+          replace: true,
+          state: { email: user.email, password: user.password },
+        });
+      } else {
+        toast.error(res?.message);
+        dispatch(registerUserSuccess());
+      }
     } catch (error) {
       console.error(error);
     }
@@ -69,9 +78,6 @@ const Register = () => {
     if (userData) {
       navigate("/login");
     }
-    if (error) {
-      toast.error(error);
-    }
   }, [navigate, userData, error]);
 
   return (
@@ -80,7 +86,7 @@ const Register = () => {
         <h1 className="absolute top-2 left-2 font-semibold">Join now</h1>
         <h1 className="text-2xl font-bold my-3">Register</h1>
         {loading ? (
-          <p>Loading...</p>
+          <p>Registering...</p>
         ) : (
           <form
             onSubmit={handleRegister}
