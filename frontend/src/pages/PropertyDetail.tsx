@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +8,10 @@ import location from "../assets/location.svg";
 import bedroom from "../assets/bedroom.svg";
 import furniture from "../assets/furniture.svg";
 import { RootState } from "../redux/rootReducer";
-import { fetchProperty } from "../redux/properties/propertyActions";
+import {
+  deleteProperty,
+  fetchProperty,
+} from "../redux/properties/propertyActions";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
@@ -18,8 +22,8 @@ import Header from "../components/Header";
 
 const PropertyDetail = () => {
   SwiperCore.use([Navigation]);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
   const { id } = useParams();
   const { property, loading, error } = useSelector(
@@ -28,6 +32,13 @@ const PropertyDetail = () => {
 
   const [contact, setContact] = useState(false);
 
+  const handlePropertyDelete = () => {
+    if (window.confirm("Are you sure you want to delete this property?")) {
+      dispatch(deleteProperty(parseInt(id ?? "")));
+      navigate(-1);
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchProperty(id?.toString()));
   }, [id, dispatch]);
@@ -35,6 +46,16 @@ const PropertyDetail = () => {
   return (
     <main className="z-0">
       <Header />
+
+      <div className="flex w-full">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-white rounded-md bg-gray-700 max-w-[360px] font-semibold px-2 py-1 my-3 ml-5"
+        >
+          Back
+        </button>
+      </div>
+
       {/* Loading */}
       {loading && (
         <div className="flex justify-center items-center absolute w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
@@ -46,9 +67,9 @@ const PropertyDetail = () => {
       {error && <h1 className="text-xl font-semibold mt-2">{error}</h1>}
 
       {property && !loading && !error && (
-        <>
+        <div className="relative z-10">
           <Swiper navigation spaceBetween={50} slidesPerView={1}>
-            {property?.imageUrls?.map((image, index) => (
+            {property?.imageUrls?.map((image: any, index: any) => (
               <SwiperSlide key={index}>
                 <div
                   className="h-[400px]"
@@ -62,10 +83,34 @@ const PropertyDetail = () => {
           </Swiper>
 
           <div className="flex flex-col p-5 mb-10">
-            <div className="text-3xl font-semibold">
-              {property?.title} - $
-              {property?.regularPrice.toLocaleString("en-US")}{" "}
-              {property?.type === "rent" ? "/ mo" : ""}
+            <div className="flex justify-between gap-3">
+              <div className="text-3xl font-semibold">
+                {property?.title} - $
+                {property?.regularPrice?.toLocaleString("en-US")}{" "}
+                {property?.type === "rent" ? "/ mo" : ""}
+              </div>
+              <div className="flex gap-3 items-center">
+                {user && property?.user_id === user?.id && (
+                  <div className="flex flex-col gap-2 mt-5">
+                    <button
+                      onClick={() => navigate(`/prop/${property?.id}/update`)}
+                      className="uppercase text-white rounded-md bg-blue-700 max-w-[360px] font-semibold px-3"
+                    >
+                      Edit Property
+                    </button>
+                  </div>
+                )}
+                {user && property?.user_id === user?.id && (
+                  <div className="flex flex-col gap-2 mt-5">
+                    <button
+                      onClick={handlePropertyDelete}
+                      className="uppercase text-white rounded-md bg-red-700 max-w-[360px] font-semibold px-3"
+                    >
+                      Delete Property
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             <p className="flex items-center my-3 gap-2 text-slate-600">
               <img src={location} className="w-5 h-5 text-green-500" />
@@ -80,7 +125,7 @@ const PropertyDetail = () => {
                   $
                   {(
                     +property?.regularPrice - +property?.discountedPrice
-                  ).toLocaleString("en-US")}{" "}
+                  )?.toLocaleString("en-US")}{" "}
                   OFF
                 </p>
               )}
@@ -114,7 +159,7 @@ const PropertyDetail = () => {
               {property?.description}
             </p>
 
-            {user && property?.user_id !== user?.id && !contact ? (
+            {user && property?.user_id !== user?.id && !contact && (
               <div className="flex flex-col gap-2 mt-5">
                 <button
                   onClick={() => setContact(true)}
@@ -123,24 +168,11 @@ const PropertyDetail = () => {
                   Contact {property?.type === "rent" ? "Leaser" : "Seller"}
                 </button>
               </div>
-            ) : (
-              <div className="flex flex-col gap-2 mt-5">
-                <button
-                  onClick={() =>
-                    navigate("/login", {
-                      state: { from: `/props/${property.id}` },
-                    })
-                  }
-                  className="uppercase text-white rounded-md bg-gray-700 max-w-[360px] font-semibold"
-                >
-                  Login for contact
-                </button>
-              </div>
             )}
 
             {contact && <ContactForm property={property} />}
           </div>
-        </>
+        </div>
       )}
     </main>
   );
