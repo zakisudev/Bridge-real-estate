@@ -6,10 +6,10 @@ import { MODEL } from "../../models";
 export let sequelize: Sequelize;
 
 export default async () => {
-  let dbHost: string = config.get("development.host");
-  let dbName: string = config.get("development.name");
-  let dbUser: string = config.get("development.user");
-  let dbPort: number = config.get("development.port");
+  let dbHost: string = config.get("production.host");
+  let dbName: string = config.get("production.name");
+  let dbUser: string = config.get("production.user");
+  let dbPort: number = config.get("production.port");
   let dbPassword: string = process.env.DB_PASSWORD || "";
 
   sequelize = new Sequelize(dbName, dbUser, dbPassword, {
