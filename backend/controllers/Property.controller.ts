@@ -17,7 +17,7 @@ class PropertyController {
       discountedPrice: evalidate.number().required(),
       regularPrice: evalidate.number().required(),
       type: evalidate.string().required(),
-      offer: evalidate.string().required(),
+      offer: evalidate.boolean().required(),
       imageUrls: evalidate.array().required(),
     });
 

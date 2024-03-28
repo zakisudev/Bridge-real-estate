@@ -74,7 +74,7 @@ export default (sequelize: Sequelize) => {
         allowNull: false,
       },
       offer: {
-        type: DataTypes.STRING,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
       },
       imageUrls: {
