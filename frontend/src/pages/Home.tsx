@@ -22,7 +22,7 @@ const Home = () => {
       <Header />
       {/* Loading */}
       {loading && (
-        <div className="flex justify-center items-center absolute w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
+        <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
           <Loader />
         </div>
       )}
@@ -40,7 +40,7 @@ const Home = () => {
             offer.
           </p>
           <div className="flex gap-5 items-start">
-            <Link to="/search" className="max-w-fit">
+            <Link to="/prop" className="max-w-fit">
               <button className="bg-teal-700 rounded border border-teal-900 text-white px-5 py-1 transition-all duration-200 font-semibold ">
                 Let&apos;s Explore..
               </button>
@@ -64,7 +64,7 @@ const Home = () => {
               properties?.filter((props) => props?.offer).length > 0 && (
                 <div>
                   <div className="my-2">
-                    <h2 className="text-2xl font-semibold text-gray-700">
+                    <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
                       Recent offers
                     </h2>
                     <Link
@@ -74,12 +74,12 @@ const Home = () => {
                       Show more offers
                     </Link>
                   </div>
-                  <div className="flex gap-3 flex-col sm:flex-row overflow-hidden">
-                    {properties?.map((props) => (
+                  <div className="grid grid-cols-4 gap-3 w-full">
+                    {properties?.slice(0, 4)?.map((props) => (
                       <Link
-                        to={`/props/${props?.id}`}
+                        to={`/prop/${props?.id}`}
                         key={props?.id}
-                        className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
+                        className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
                       >
                         <img
                           src={props?.imageUrls[0]}
@@ -114,13 +114,13 @@ const Home = () => {
           </div>
 
           {/* Sale */}
-          <div className="max-w-6xl p-0 md:p-5 flex flex-col w-full">
-            {properties &&
-              properties?.filter((props) => props?.type === "sale").length >
-                0 && (
-                <div className="">
+          {properties &&
+            properties?.filter((props) => props?.type === "sale").length >
+              0 && (
+              <div className="p-0 md:p-5 flex flex-col w-full">
+                <div>
                   <div className="my-2">
-                    <h2 className="text-2xl font-semibold text-gray-700">
+                    <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
                       Recent places for SALE
                     </h2>
                     <Link
@@ -130,15 +130,16 @@ const Home = () => {
                       Show more places for SALE
                     </Link>
                   </div>
-                  <div className="flex gap-3 flex-col sm:flex-row overflow-hidden">
+                  <div className="grid grid-cols-4 gap-3 w-full">
                     {properties &&
                       properties
-                        ?.filter((props) => props?.type === "Apartment")
+                        ?.filter((props) => props?.type === "sale")
+                        ?.slice(0, 4)
                         .map((props) => (
                           <Link
-                            to={`/props/${props?.id}`}
+                            to={`/prop/${props?.id}`}
                             key={props?.id}
-                            className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
+                            className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
                           >
                             <img
                               src={props?.imageUrls[0]}
@@ -169,61 +170,64 @@ const Home = () => {
                         ))}
                   </div>
                 </div>
-              )}
-          </div>
+              </div>
+            )}
 
           {/* Rent */}
-          <div className="max-w-6xl p-0 md:p-5 flex flex-col w-full">
+          <div className="p-0 md:p-5 flex flex-col w-full">
             {properties &&
               properties?.filter((props) => props.type === "rent").length >
                 0 && (
                 <div className="">
                   <div className="my-2">
-                    <h2 className="text-2xl font-semibold text-gray-700">
-                      Recent places for SALE
+                    <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
+                      Recent places for RENT
                     </h2>
                     <Link
-                      to="/search?type=sale"
+                      to="/search?type=rent"
                       className="text-blue-600 hover:underline text-sm text-semibold"
                     >
-                      Show more places for SALE
+                      Show more places for RENT
                     </Link>
                   </div>
-                  <div className="flex gap-3 flex-col sm:flex-row overflow-hidden">
+                  <div className="grid grid-cols-4 gap-3">
                     {properties &&
-                      properties?.map((props) => (
-                        <Link
-                          to={`/props/${props?.id}`}
-                          key={props?.id}
-                          className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
-                        >
-                          <img
-                            src={props?.imageUrls[0]}
-                            alt={props?.title}
-                            className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
-                          />
-                          <div className="flex flex-col gap-1 p-3">
-                            <h1 className="text-lg font-semibold">
-                              {props?.title}
-                            </h1>
-                            <p className="flex gap-1 items-center  text-green-700">
-                              <img src={location} className="w-5 h-5" />
-                              <span className="text-gray-700">
-                                {props?.address}
-                              </span>
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {props?.description.substring(0, 100)}...
-                            </p>
-                            <div className="flex justify-between items-center">
+                      properties
+                        ?.filter((props) => props?.type === "rent")
+                        ?.slice(0, 4)
+                        ?.map((props) => (
+                          <Link
+                            to={`/prop/${props?.id}`}
+                            key={props?.id}
+                            className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
+                          >
+                            <img
+                              src={props?.imageUrls[0]}
+                              alt={props?.title}
+                              className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
+                            />
+                            <div className="flex flex-col gap-1 p-3">
                               <h1 className="text-lg font-semibold">
-                                ${props?.regularPrice.toLocaleString("en-US")}
-                                {props?.type === "rent" ? " / mo" : ""}
+                                {props?.title}
                               </h1>
+                              <p className="flex gap-1 items-center  text-green-700">
+                                <img src={location} className="w-5 h-5" />
+                                <span className="text-gray-700">
+                                  {props?.address}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {props?.description.substring(0, 100)}...
+                              </p>
+                              <div className="flex justify-between items-center">
+                                <h1 className="text-lg font-semibold">
+                                  ${props?.regularPrice.toLocaleString("en-US")}
+                                  {props?.type === "rent" ? " / mo" : ""}
+                                </h1>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      ))}
+                          </Link>
+                        ))}
                   </div>
                 </div>
               )}

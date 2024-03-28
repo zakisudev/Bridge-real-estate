@@ -55,17 +55,11 @@ const Register = () => {
     }
     try {
       dispatch(registerUser(user));
-      if (userData && !error) {
-        toast.success("User registered successfully");
-        navigate("/login", {
-          replace: true,
-          state: { email: user.email, password: user.password },
-        });
-      }
-      if (!userData && error) {
-        console.log(error);
-        toast.error(error);
-      }
+      toast.success("User registered successfully");
+      navigate("/login", {
+        replace: true,
+        state: { email: user.email, password: user.password },
+      });
     } catch (error) {
       console.error(error);
     }

@@ -11,8 +11,10 @@ import Login from "./pages/Login";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import PropertyList from "./pages/PropertyList";
 import Search from "./pages/Search";
-import PropertyDetail from "./pages/PropertyDetail";
 import CreateProperty from "./pages/CreateProperty";
+import Profile from "./pages/Profile";
+import UpdateProperty from "./pages/UpdateProperty";
+import PropertyDetail from "./pages/PropertyDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,10 +22,13 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="" element={<ProtectedRoutes />}>
         <Route path="create" element={<CreateProperty />} />
-        <Route path="dashboard" element={<PropertyList />} />
+        <Route path="update/:id" element={<UpdateProperty />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="search" element={<Search />} />
-      <Route path="props/:id" element={<PropertyDetail />} />
+      <Route path="prop" element={<PropertyList />} />
+      <Route path="prop/:id" element={<PropertyDetail />} />
+      <Route path="prop/:id/update" element={<UpdateProperty />} />
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
     </Route>

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { loginUser } from "../redux/auth/authActions";
 import { RootState } from "../redux/rootReducer";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -26,12 +27,16 @@ const Login = () => {
     e.preventDefault();
     try {
       dispatch(loginUser(user));
-      if (authData && !error) {
+      if (!authData && loading && !error) {
+        return (
+          <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
+            <Loader />
+          </div>
+        );
+      }
+      if (authData && !loading && !error) {
         !error && toast.success("User login successful");
         navigate(from);
-      }
-      if (!authData && error) {
-        toast.error(error);
       }
     } catch (error) {
       console.error(error);
@@ -41,9 +46,6 @@ const Login = () => {
   useEffect(() => {
     if (authData) {
       navigate("/");
-    }
-    if (error && !authData) {
-      toast.error(error);
     }
   }, [navigate, authData, error]);
 
@@ -78,6 +80,8 @@ const Login = () => {
           {/* {errors.confirmPassword && touched.confirmPassword && (
             <p className="text-red-500 text-xs">{errors.confirmPassword}</p>
           )} */}
+
+          {error && <p className="text-red-500 text-center text-xs">{error}</p>}
 
           <button
             type="submit"
