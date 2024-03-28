@@ -1,14 +1,16 @@
 export interface AuthResponse {
-  id: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  is_admin: boolean;
-  token: string;
-  name: string;
-  response: {
+  id?: number | undefined;
+  username: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  email: string | undefined;
+  phone: string | undefined;
+  is_admin?: boolean | undefined;
+  token?: string | undefined;
+  name: string | undefined;
+  password?: string | undefined;
+  confirmPassword?: string | undefined;
+  response?: {
     data: {
       message: string;
     };
@@ -18,13 +20,13 @@ export interface AuthResponse {
 
 export interface RegisterResponse {
   user: {
-    id: number;
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    is_admin: boolean;
+    id: number | undefined;
+    username: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    phone: string | undefined;
+    is_admin: boolean | undefined;
   };
   name: string;
   response: {
