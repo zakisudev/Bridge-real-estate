@@ -1,9 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { PropertyState } from "../interfaces/propertyInterface";
 
-const initialState: PropertyState = {
-  properties: [],
+const initialState: any = {
+  properties: [
+    {
+      id: "",
+      title: "",
+      description: "",
+      address: "",
+      bathrooms: 0,
+      bedrooms: 0,
+      furnished: false,
+      parking: false,
+      size: 0,
+      discountedPrice: 0,
+      regularPrice: 0,
+      type: "",
+      offer: false,
+      imageUrls: [""],
+      user_id: 0,
+    },
+  ],
   property: null,
+  pagination: {
+    totalPages: 0,
+    prevPage: null,
+    nextPage: null,
+    totalItems: 0,
+    currentPage: 1,
+    pageSize: 9,
+  },
   loading: false,
   error: null,
 };
@@ -24,7 +49,8 @@ const propertySlice = createSlice({
 
     setProperties(state, action) {
       state.loading = false;
-      state.properties = action.payload;
+      state.properties = action.payload.properties;
+      state.pagination = action.payload.pagination;
     },
 
     getProperty(state) {
@@ -58,9 +84,11 @@ const propertySlice = createSlice({
     },
     updatePropertySuccess(state, action) {
       state.loading = false;
-      state.properties = (state.properties || []).map((property) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      state.properties = (state.properties || []).map((property: any) =>
         property.id === action.payload.id ? action.payload : property
       );
+      state.property = action.payload;
     },
     updatePropertyFailed(state, action) {
       state.loading = false;
@@ -73,7 +101,8 @@ const propertySlice = createSlice({
     deletePropertySuccess(state, action) {
       state.loading = false;
       state.properties = (state.properties || []).filter(
-        (property) => property.id !== action.payload
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (property: any) => property.id !== action.payload
       );
     },
     deletePropertyFailed(state, action) {

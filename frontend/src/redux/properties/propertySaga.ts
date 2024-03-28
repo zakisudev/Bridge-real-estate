@@ -29,13 +29,14 @@ import {
   deletePropertyFailed,
 } from "./propertyReducer";
 
-function* getPropertiesSaga(search: { type: string; payload: string }) {
+function* getPropertiesSaga(page: { type: string; payload: string }) {
   try {
     yield put(getProperties());
     const response: PropertyResponse = yield call(
       fetchProperties,
-      search.payload
+      page.payload
     );
+
     yield put(setProperties(response));
   } catch (error) {
     yield put(getPropertiesFailed(error));
@@ -62,24 +63,18 @@ function* addPropertySaga(action: { type: string; payload: PropertyModel }) {
   }
 }
 
-function* updatePropertySaga(action: {
-  type: string;
-  payload: { id: string; property: PropertyModel };
-}) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function* updatePropertySaga(action: any) {
   try {
     yield put(updateProperty());
-    const response: PropertyResponse = yield call(
-      UPDATE,
-      action.payload.id,
-      action.payload.property
-    );
+    const response: PropertyResponse = yield call(UPDATE, action.payload);
     yield put(updatePropertySuccess(response));
   } catch (error) {
     yield put(updatePropertyFailed(error));
   }
 }
 
-function* deletePropertySaga(action: { type: string; payload: string }) {
+function* deletePropertySaga(action: { type: string; payload: number }) {
   try {
     yield put(deleteProperty());
     const response: PropertyResponse = yield call(DELETE, action.payload);

@@ -46,7 +46,7 @@ export const updateProperty = (property: PropertyModel) => {
   };
 };
 
-export const deleteProperty = (id: string) => {
+export const deleteProperty = (id: number) => {
   return {
     type: propertyTypes.DELETE_PROPERTY,
     payload: id,
