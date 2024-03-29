@@ -39,14 +39,20 @@ const Header = () => {
           {dropDown && (
             <div className="absolute top-12 right-0 bg-white shadow-md rounded-xl px-3 py-1 z-[999]">
               <Link
+                to="/create"
+                className="text-center rounded block px-3 py-1 hover:bg-gray-200 my-2"
+              >
+                Post
+              </Link>
+              <Link
                 to="/profile"
-                className="block px-3 py-1 hover:bg-gray-200 my-2"
+                className="text-center rounded block px-3 py-1 hover:bg-gray-200 my-2"
               >
                 Profile
               </Link>
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center px-3 rounded-xl border my-2 border-gray-400 w-full"
+                className="flex items-center justify-center px-3 py-1 rounded-xl border my-2 border-gray-400 w-full"
               >
                 <LogoutOutlined />
               </button>

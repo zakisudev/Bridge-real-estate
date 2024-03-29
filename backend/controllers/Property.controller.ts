@@ -23,13 +23,12 @@ class PropertyController {
 
     const result = Schema.validate(req.body);
     if (result.isValid) {
-      PropertyService.create(req.body, req)
-        .then((result: Property) => {
-          res.status(201).json(result);
-        })
-        .catch((error: Error) => {
-          res.status(400).json({ message: error.message });
-        });
+      try {
+        const property = await PropertyService.create(req.body, req);
+        res.status(201).json(property);
+      } catch (error: any) {
+        res.status(500).json({ success: false, message: error.message });
+      }
     } else {
       let errors: any = {};
       result.errors.forEach((err: any) => {

@@ -30,7 +30,8 @@ const PropertyList = () => {
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {properties &&
-                properties?.map((props) => (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                properties?.map((props: any) => (
                   <Link
                     to={`/prop/${props?.id}`}
                     key={props?.id}

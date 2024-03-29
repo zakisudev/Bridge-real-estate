@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { useEffect } from "react";
@@ -61,7 +62,7 @@ const Home = () => {
           {/* Offer */}
           <div className="p-0 md:p-5 flex flex-col w-full">
             {properties &&
-              properties?.filter((props) => props?.offer).length > 0 && (
+              properties?.filter((props: any) => props?.offer).length > 0 && (
                 <div>
                   <div className="my-2">
                     <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
@@ -75,7 +76,7 @@ const Home = () => {
                     </Link>
                   </div>
                   <div className="grid grid-cols-4 gap-3 w-full">
-                    {properties?.slice(0, 4)?.map((props) => (
+                    {properties?.slice(0, 4)?.map((props: any) => (
                       <Link
                         to={`/prop/${props?.id}`}
                         key={props?.id}
@@ -115,7 +116,7 @@ const Home = () => {
 
           {/* Sale */}
           {properties &&
-            properties?.filter((props) => props?.type === "sale").length >
+            properties?.filter((props: any) => props?.type === "sale").length >
               0 && (
               <div className="p-0 md:p-5 flex flex-col w-full">
                 <div>
@@ -133,9 +134,11 @@ const Home = () => {
                   <div className="grid grid-cols-4 gap-3 w-full">
                     {properties &&
                       properties
-                        ?.filter((props) => props?.type === "sale")
+
+                        ?.filter((props: any) => props?.type === "sale")
                         ?.slice(0, 4)
-                        .map((props) => (
+
+                        .map((props: any) => (
                           <Link
                             to={`/prop/${props?.id}`}
                             key={props?.id}
@@ -176,7 +179,7 @@ const Home = () => {
           {/* Rent */}
           <div className="p-0 md:p-5 flex flex-col w-full">
             {properties &&
-              properties?.filter((props) => props.type === "rent").length >
+              properties?.filter((props: any) => props.type === "rent").length >
                 0 && (
                 <div className="">
                   <div className="my-2">
@@ -193,9 +196,11 @@ const Home = () => {
                   <div className="grid grid-cols-4 gap-3">
                     {properties &&
                       properties
-                        ?.filter((props) => props?.type === "rent")
+
+                        ?.filter((props: any) => props?.type === "rent")
                         ?.slice(0, 4)
-                        ?.map((props) => (
+
+                        ?.map((props: any) => (
                           <Link
                             to={`/prop/${props?.id}`}
                             key={props?.id}
