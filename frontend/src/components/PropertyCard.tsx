@@ -23,6 +23,11 @@ const PropertyCard = (data: { key: string; property: Property }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    if (!data?.property?.id) return;
+    if (!window.confirm("Are you sure you want to delete this property?")) {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await deleteProperty(parseInt(data?.property?.id));
       if (res?.success) {

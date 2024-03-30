@@ -1,57 +1,33 @@
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
-import Loader from "../components/Loader";
+import { Link } from "react-router-dom";
+import Pagination from "../components/Pagination";
+import { fetchProperties } from "../redux/properties/propertyActions";
 import Header from "../components/Header";
+import PropertyCard from "../components/PropertyCard";
 
-const UsersProperties = () => {
-  // const users = [
-  //   {
-  //     id: 1,
-  //     firstName: "John",
-  //     lastName: "Doe",
-  //     username: "john_doe",
-  //     email: "john@email.com",
-  //     is_admin: false,
-  //     createdAt: "2021-09-01",
-  //   },
-  //   {
-  //     id: 2,
-  //     firstName: "Jane",
-  //     lastName: "Doe",
-  //     username: "jane_doe",
-  //     email: "jane@email.com",
-  //     is_admin: true,
-  //     createdAt: "2021-09-05",
-  //   },
-  // ];
-  const formatDate = (date: string) => {
-    const d = new Date(date);
-    return d.toDateString();
-  };
-  const { users, loading, error } = useSelector(
-    (state: RootState) => state.user
+const UserPropertiesList = () => {
+  const dispatch = useDispatch();
+  const { properties, loading, error, pagination } = useSelector(
+    (state: RootState) => state.property
   );
+
+  const handlePageChange = (page: number | null) => {
+    dispatch(fetchProperties(`?page=${page}`));
+  };
 
   return (
     <>
-      {/* Loading */}
-      {loading && (
-        <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
-          <Loader />
-        </div>
-      )}
+      <Header />
 
       {/* Error */}
       {error && (
-        <div className="flex">
+        <div className="flex justify-center">
           <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
             {error}, Please reload
           </h1>
         </div>
       )}
-
-      <Header />
       <div className="flex flex-1 gap-3 w-full pl-5">
         <Link
           to="/"
@@ -60,77 +36,53 @@ const UsersProperties = () => {
           Go Home
         </Link>
         <Link
-          to="/admin/users"
+          to="/admin/users-properties"
           className="text-white rounded-md bg-blue-700 max-w-[360px] font-semibold px-2 py-1 my-3"
         >
-          All Users
+          All Properties
         </Link>
       </div>
-      <div className="w-[90%] flex flex-col mx-auto">
-        <h1 className="text-2xl font-semibold mt-5">All Properties</h1>
-        <table className="w-full border-collapse border border-gray-300 mt-5">
-          <thead>
-            <tr>
-              <th className="border border-gray-300">ID</th>
-              <th className="border border-gray-300">First Name</th>
-              <th className="border border-gray-300">Last Name</th>
-              <th className="border border-gray-300">Username</th>
-              <th className="border border-gray-300">Email</th>
-              <th className="border border-gray-300">Register date</th>
-              <th className="border border-gray-300">Is Admin</th>
-              <th className="border border-gray-300 w-32"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users && users?.length > 0 ? (
-              users?.map((user) => (
-                <tr key={user?.id}>
-                  <td className="border border-gray-300 py-2 text-center">
-                    {user?.id}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-left pl-3">
-                    {user?.firstName}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-left pl-3">
-                    {user?.lastName}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-center">
-                    {user?.username}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-center">
-                    {user?.email}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-center">
-                    {formatDate(user?.createdAt || "")}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-center">
-                    {user?.is_admin ? "Yes" : "No"}
-                  </td>
-                  <td className="border border-gray-300 py-2 text-center">
-                    <Link
-                      to={`/admin/users/${user.id}`}
-                      className="px-3 py-1 bg-blue-500 text-white rounded"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  className="border border-gray-300 text-center py-2"
-                  colSpan={7}
-                >
-                  No users found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+
+      <div className="w-full px-10 py-5">
+        {loading ? (
+          <div className="flex justify-center items-center w-full h-full">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center">
+            <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+              {error}, Please reload
+            </h1>
+          </div>
+        ) : properties && properties?.length > 0 ? (
+          <div className="flex flex-col">
+            <h1 className="text-xl font-semibold my-2 bg-gray-200 py-1 pl-3">
+              All Users Properties
+            </h1>
+            <div className="grid grid-cols-1 gap-3 ">
+              {properties &&
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                properties?.map((prop: any) => (
+                  <Link
+                    to={`/prop/${prop?.id}`}
+                    key={prop?.id}
+                    className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden"
+                  >
+                    <PropertyCard key={prop?.id} property={prop} />
+                  </Link>
+                ))}
+            </div>
+            <Pagination
+              pagination={pagination}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        ) : (
+          <h1 className="text-xl font-semibold mt-2">No property found</h1>
+        )}
       </div>
     </>
   );
 };
 
-export default UsersProperties;
+export default UserPropertiesList;
