@@ -25,7 +25,11 @@ const PropertyList = () => {
             <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
           </div>
         ) : error ? (
-          <h1 className="text-xl font-semibold mt-2">{error}</h1>
+          <div className="flex justify-center">
+            <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+              {error}, Please reload
+            </h1>
+          </div>
         ) : properties && properties?.length > 0 ? (
           <div className="flex flex-col">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

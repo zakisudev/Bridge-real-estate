@@ -14,8 +14,11 @@ export interface Property {
   offer: boolean;
   imageUrls: string[];
   user_id: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
-export interface PropertyResponse {
+
+export interface PropertiesResponse {
   properties: [Property];
   pagination: {
     totalPages: number;
@@ -25,6 +28,7 @@ export interface PropertyResponse {
     currentPage: number;
     pageSize: number;
   };
+  name: string;
   user: {
     id: number;
     username: string;
@@ -34,12 +38,19 @@ export interface PropertyResponse {
     phone: string;
     is_admin: boolean;
   };
-  createdAt: string;
-  updatedAt: string;
+  message: string;
+  success: boolean;
+}
+
+export interface PropertyResponse {
+  property: Property;
+  message: string;
+  success: boolean;
+  name: string;
 }
 
 export interface PropertyState {
-  properties: PropertyResponse["properties"] | [];
+  properties: PropertiesResponse["properties"] | [];
   property: Property | null;
   pagination: {
     totalPages: number;
