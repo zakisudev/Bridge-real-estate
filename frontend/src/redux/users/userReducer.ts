@@ -3,6 +3,7 @@ import { UserState } from "../interfaces/userInterface";
 
 const initialState: UserState = {
   users: [],
+  user: null,
   loading: false,
   error: null,
 };
@@ -30,7 +31,13 @@ const userSlice = createSlice({
     },
     getUserFailure(state, action) {
       state.loading = false;
+      state.users = [];
       state.error = action.payload;
+    },
+    setUser(state, action) {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
     },
 
     addUser(state) {
@@ -73,6 +80,10 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    resetAll(state) {
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -83,6 +94,7 @@ export const {
   getUser,
   getUserFailure,
   addUser,
+  setUser,
   addUserSuccess,
   addUserFailure,
   updateUser,
@@ -91,6 +103,7 @@ export const {
   deleteUser,
   deleteUserSuccess,
   deleteUserFailure,
+  resetAll,
 } = userSlice.actions;
 
 export default userSlice.reducer;

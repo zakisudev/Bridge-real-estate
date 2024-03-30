@@ -27,7 +27,11 @@ const loginUser = async (user: UserRegister) => {
 
 const logout = async () => {
   try {
-    const response = await axios.post(`${API_URL}/user/logout`);
+    const response = await axios.post(`${API_URL}/user/logout`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -37,7 +41,11 @@ const logout = async () => {
 // User API calls
 const fetchUsers = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user`);
+    const response = await axios.get(`${API_URL}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -46,7 +54,11 @@ const fetchUsers = async () => {
 
 const fetchUser = async (id: string) => {
   try {
-    const response = await axios.get(`${API_URL}/user/${id}`);
+    const response = await axios.get(`${API_URL}/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response?.data;
   } catch (error) {
     return error;
@@ -88,6 +100,15 @@ const deleteUser = async (id: number) => {
   }
 };
 
+const fetchAllProperties = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/prop`);
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 // Property API calls
 const fetchProperties = async (page: string) => {
   try {
@@ -114,7 +135,7 @@ const addProperty = async (property: PropertyModel) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data?.data;
+    return response?.data;
   } catch (error) {
     return error;
   }
@@ -155,6 +176,7 @@ export {
   addUser,
   updateUser,
   deleteUser,
+  fetchAllProperties,
   fetchProperties,
   fetchProperty,
   addProperty,
