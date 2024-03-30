@@ -7,13 +7,14 @@ import { RootState } from "../redux/rootReducer";
 import Loader from "../components/Loader";
 import { Property } from "../redux/interfaces/propertyInterface";
 import Header from "../components/Header";
-import { fetchAllProperties } from "../services/api";
+import { deleteUser, fetchAllProperties } from "../services/api";
 import PropertyCard from "../components/PropertyCard";
+import { toast } from "react-toastify";
 
 const UserDetails = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const { id } = useParams<{ id: string | undefined }>();
 
   const { user, loading, error } = useSelector(
@@ -22,6 +23,22 @@ const UserDetails = () => {
   const formatDate = (date: string | undefined) => {
     const d = new Date(date ? date : "");
     return d.toDateString();
+  };
+
+  const handleUserDelete = async () => {
+    if (!id) return;
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      const res = await deleteUser(parseInt(id || ""));
+      if (res?.success) {
+        toast.success("User deleted successfully");
+        navigate("/admin/users");
+      } else {
+        toast.error("Failed to delete user");
+      }
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   useEffect(() => {
@@ -73,7 +90,7 @@ const UserDetails = () => {
           <h1 className="text-2xl mt-10 font-semibold">
             {user?.firstName} {user?.lastName}
           </h1>
-          <div className="mt-5 flex gap-16 bg-gray-200 p-3">
+          <div className="mt-5 flex justify-between gap-16 bg-gray-200 p-3">
             <div className="flex flex-col">
               <h2 className="text-lg">
                 Username:{" "}
@@ -104,6 +121,13 @@ const UserDetails = () => {
                 {user?.is_admin ? "Yes" : "No"}
               </span>
             </h2>
+
+            <button
+              onClick={handleUserDelete}
+              className="text-lg px-2 py-1 bg-red-600 text-white font-semibold rounded"
+            >
+              {loading ? "..." : " Delete User"}
+            </button>
           </div>
           <h2 className="text-2xl mt-10 font-semibold mb-5">Properties </h2>
           {properties &&

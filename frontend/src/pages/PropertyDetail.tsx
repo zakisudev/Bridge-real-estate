@@ -165,7 +165,7 @@ const PropertyDetail = () => {
               {property?.description}
             </p>
 
-            {user && property?.user_id !== user?.id && !contact && (
+            {user && parseInt(property?.user?.id) !== user?.id && !contact && (
               <div className="flex flex-col gap-2 mt-5">
                 <button
                   onClick={() => setContact(true)}

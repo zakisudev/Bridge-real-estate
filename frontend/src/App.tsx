@@ -35,8 +35,8 @@ const router = createBrowserRouter(
         <Route path="users/:id" element={<UserDetails />} />
         <Route path="users-properties" element={<UsersProperties />} />
       </Route>
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="search/:query" element={<Search />} />
+      <Route path="admin/login" element={<AdminLogin />} />
+      <Route path="search" element={<Search />} />
       <Route path="prop" element={<PropertyList />} />
       <Route path="prop/:id" element={<PropertyDetail />} />
       <Route path="prop/:id/update" element={<UpdateProperty />} />
