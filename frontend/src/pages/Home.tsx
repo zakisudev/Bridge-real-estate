@@ -28,6 +28,15 @@ const Home = () => {
         </div>
       )}
 
+      {/* Error */}
+      {error && (
+        <div className="flex">
+          <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+            {error}, Please reload
+          </h1>
+        </div>
+      )}
+
       <div className="flex flex-col p-1 md:p-10  gap-5 w-full">
         {/* Top */}
         <div className="flex flex-col gap-5 p-5">
@@ -54,9 +63,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Error */}
-        {error && <h1 className="text-xl font-semibold mt-2">{error}</h1>}
-
         {/* Listings */}
         <div className="flex flex-col gap-5 w-full">
           {/* Offer */}
@@ -76,39 +82,42 @@ const Home = () => {
                     </Link>
                   </div>
                   <div className="grid grid-cols-4 gap-3 w-full">
-                    {properties?.slice(0, 4)?.map((props: any) => (
-                      <Link
-                        to={`/prop/${props?.id}`}
-                        key={props?.id}
-                        className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
-                      >
-                        <img
-                          src={props?.imageUrls[0]}
-                          alt={props?.title}
-                          className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
-                        />
-                        <div className="flex flex-col gap-1 p-3">
-                          <h1 className="text-lg font-semibold">
-                            {props?.title}
-                          </h1>
-                          <p className="flex gap-1 items-center  text-green-700">
-                            <img src={location} className="w-5 h-5" />
-                            <span className="text-gray-700">
-                              {props?.address}
-                            </span>
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {props.description.substring(0, 100)}...
-                          </p>
-                          <div className="flex justify-between items-center">
+                    {properties
+                      ?.filter((props: any) => props?.offer)
+                      ?.slice(0, 4)
+                      ?.map((props: any) => (
+                        <Link
+                          to={`/prop/${props?.id}`}
+                          key={props?.id}
+                          className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
+                        >
+                          <img
+                            src={props?.imageUrls[0]}
+                            alt={props?.title}
+                            className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
+                          />
+                          <div className="flex flex-col gap-1 p-3">
                             <h1 className="text-lg font-semibold">
-                              ${props.regularPrice.toLocaleString("en-US")}
-                              {props?.type === "rent" ? " / mo" : ""}
+                              {props?.title}
                             </h1>
+                            <p className="flex gap-1 items-center  text-green-700">
+                              <img src={location} className="w-5 h-5" />
+                              <span className="text-gray-700">
+                                {props?.address}
+                              </span>
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {props.description.substring(0, 100)}...
+                            </p>
+                            <div className="flex justify-between items-center">
+                              <h1 className="text-lg font-semibold">
+                                ${props.regularPrice.toLocaleString("en-US")}
+                                {props?.type === "rent" ? " / mo" : ""}
+                              </h1>
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                    ))}
+                        </Link>
+                      ))}
                   </div>
                 </div>
               )}

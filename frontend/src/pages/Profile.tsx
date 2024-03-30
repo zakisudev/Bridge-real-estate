@@ -32,7 +32,7 @@ const Profile = () => {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user && user.id) {
+    if (user && user?.id) {
       try {
         if (formData?.password !== formData?.confirmPassword) {
           toast.error("Passwords do not match");
@@ -50,7 +50,6 @@ const Profile = () => {
             );
           } else if (!loading && error) {
             toast.success(error);
-            dispatch(logoutUser());
             return;
           } else if (res.success) {
             toast.success("Profile updated successfully");
