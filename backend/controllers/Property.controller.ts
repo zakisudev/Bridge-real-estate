@@ -25,7 +25,11 @@ class PropertyController {
     if (result.isValid) {
       try {
         const property = await PropertyService.create(req.body, req);
-        res.status(201).json(property);
+        res.status(201).json({
+          property,
+          success: true,
+          message: "Property created successfully",
+        });
       } catch (error: any) {
         res.status(500).json({ success: false, message: error.message });
       }
@@ -46,7 +50,7 @@ class PropertyController {
         res.status(200).json(result);
       })
       .catch((error: Error) => {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ success: false, message: error.message });
       });
   }
 
@@ -55,10 +59,10 @@ class PropertyController {
 
     PropertyService.findById(id)
       .then((result: Property) => {
-        res.status(200).json(result);
+        res.status(200).json({ property: result, success: true, message: "" });
       })
       .catch((error: Error) => {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ success: false, message: error.message });
       });
   }
 
@@ -73,14 +77,14 @@ class PropertyController {
           res.status(200).json(result);
         })
         .catch((error: Error) => {
-          res.status(400).json({ message: error.message });
+          res.status(400).json({ success: false, message: error.message });
         });
     } else {
       let errors: any = {};
       result.errors.forEach((err: any) => {
         errors[err.field] = err.message;
       });
-      res.status(400).json({ message: errors });
+      res.status(400).json({ success: false, message: errors });
     }
   }
 
@@ -107,7 +111,7 @@ class PropertyController {
         });
       })
       .catch((error: Error) => {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ success: false, message: error.message });
       });
   }
 
@@ -119,7 +123,7 @@ class PropertyController {
         res.status(200).json(result);
       })
       .catch((error: Error) => {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ success: false, message: error.message });
       });
   }
 }
