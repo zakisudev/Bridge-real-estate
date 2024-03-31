@@ -130,26 +130,20 @@ class PropertyController {
 
     PropertyService.getPagedWithCount(page, limit, filter, search as string)
       .then(({ properties, count }) => {
-        const totalPages = Math.ceil(count / limit);
+        const totalPages = Math.ceil(properties.length / limit);
         const prevPage = page > 1 ? page - 1 : null;
         const nextPage = page < totalPages ? page + 1 : null;
-        const response: any = {
+        res.status(200).json({
           properties,
-        };
-
-        // Only include pagination object if a filter is applied
-        if (Object.keys(filter).length > 0) {
-          response.pagination = {
+          pagination: {
             totalPages,
             prevPage,
             nextPage,
-            totalItems: count,
+            totalItems: properties.length,
             currentPage: page,
             pageSize: limit,
-          };
-        }
-
-        res.status(200).json(response);
+          },
+        });
       })
       .catch((error: Error) => {
         res.status(400).json({ success: false, message: error.message });
