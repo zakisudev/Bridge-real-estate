@@ -11,6 +11,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dropDown, setDropDown] = useState(false);
+  const [search, setSearch] = useState("");
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = async () => {
@@ -32,6 +33,19 @@ const Header = () => {
       <Link to="/">
         <img src={Logo} alt="logo" className="w-14 h-14 rounded-full" />
       </Link>
+      <div className="flex gap-3">
+        <input
+          type="text"
+          className="px-2 py-1 rounded"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e: React.FormEvent) => {
+            e.preventDefault();
+            navigate(`/search?search=${search}&type=all`);
+          }}
+          placeholder="Search..."
+        />
+      </div>
       {user ? (
         <div className="flex gap-3 justify-center font-semibold py-1 relative dropDown">
           <button
