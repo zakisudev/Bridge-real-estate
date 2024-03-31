@@ -129,9 +129,14 @@ class PropertyDal {
     });
   }
 
-  static async getPaged(page: number, limit: number): Promise<Property[]> {
+  static async getPaged(
+    page: number,
+    limit: number,
+    filter?: any
+  ): Promise<Property[]> {
     return new Promise((resolve, reject) => {
       Property.findAll({
+        where: filter ?? {},
         limit: limit,
         offset: (page - 1) * limit,
         order: [["createdAt", "DESC"]],
