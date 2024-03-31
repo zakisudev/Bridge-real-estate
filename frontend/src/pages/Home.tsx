@@ -1,21 +1,45 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
-import { useEffect } from "react";
-import { fetchProperties } from "../redux/properties/propertyActions";
+import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import location from "../assets/location.svg";
 import Loader from "../components/Loader";
+import { fetchAllProperties } from "../services/api";
+import { Property } from "../redux/interfaces/propertyInterface";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { properties, loading, error } = useSelector(
-    (state: RootState) => state.property
-  );
+  const [offerProperties, setOfferProperties] = useState([]);
+  const [saleProperties, setSaleProperties] = useState([]);
+  const [rentProperties, setRentProperties] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    dispatch(fetchProperties(""));
+    setLoading(true);
+    try {
+      const fetchProperties = async () => {
+        const data = await fetchAllProperties();
+        if (data) {
+          setOfferProperties(
+            data?.filter((prop: Property) => prop.offer === true)
+          );
+          setSaleProperties(
+            data?.filter((prop: Property) => prop.type === "sale")
+          );
+          setRentProperties(
+            data?.filter((prop: Property) => prop.type === "rent")
+          );
+        }
+        setLoading(false);
+      };
+
+      fetchProperties();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message);
+    }
   }, [dispatch]);
 
   return (
@@ -25,6 +49,15 @@ const Home = () => {
       {loading && (
         <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
           <Loader />
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="flex">
+          <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+            {error}, Please reload
+          </h1>
         </div>
       )}
 
@@ -54,15 +87,12 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Error */}
-        {error && <h1 className="text-xl font-semibold mt-2">{error}</h1>}
-
         {/* Listings */}
-        <div className="flex flex-col gap-5 w-full">
-          {/* Offer */}
-          <div className="p-0 md:p-5 flex flex-col w-full">
-            {properties &&
-              properties?.filter((props: any) => props?.offer).length > 0 && (
+        {saleProperties && rentProperties && offerProperties && (
+          <div className="flex flex-col gap-5 w-full">
+            {/* Offer */}
+            <div className="p-0 md:p-5 flex flex-col items-center mx-auto w-full">
+              {offerProperties && offerProperties?.length > 0 && (
                 <div>
                   <div className="my-2">
                     <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
@@ -75,8 +105,8 @@ const Home = () => {
                       Show more offers
                     </Link>
                   </div>
-                  <div className="grid grid-cols-4 gap-3 w-full">
-                    {properties?.slice(0, 4)?.map((props: any) => (
+                  <div className="grid lg:grid-cols-4 sm:grid-cols-3 md:grid-cols-2 gap-3 w-full">
+                    {offerProperties?.slice(0, 4)?.map((props: any) => (
                       <Link
                         to={`/prop/${props?.id}`}
                         key={props?.id}
@@ -112,13 +142,11 @@ const Home = () => {
                   </div>
                 </div>
               )}
-          </div>
+            </div>
 
-          {/* Sale */}
-          {properties &&
-            properties?.filter((props: any) => props?.type === "sale").length >
-              0 && (
-              <div className="p-0 md:p-5 flex flex-col w-full">
+            {/* Sale */}
+            {saleProperties && saleProperties?.length > 0 && (
+              <div className="p-0 md:p-5 flex flex-col items-center mx-auto  w-full">
                 <div>
                   <div className="my-2">
                     <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
@@ -131,56 +159,49 @@ const Home = () => {
                       Show more places for SALE
                     </Link>
                   </div>
-                  <div className="grid grid-cols-4 gap-3 w-full">
-                    {properties &&
-                      properties
-
-                        ?.filter((props: any) => props?.type === "sale")
-                        ?.slice(0, 4)
-
-                        .map((props: any) => (
-                          <Link
-                            to={`/prop/${props?.id}`}
-                            key={props?.id}
-                            className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
-                          >
-                            <img
-                              src={props?.imageUrls[0]}
-                              alt={props?.title}
-                              className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
-                            />
-                            <div className="flex flex-col gap-1 p-3">
+                  <div className="grid lg:grid-cols-4 sm:grid-cols-3 md:grid-cols-2 gap-3 w-full">
+                    {saleProperties &&
+                      saleProperties?.slice(0, 4).map((props: any) => (
+                        <Link
+                          to={`/prop/${props?.id}`}
+                          key={props?.id}
+                          className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
+                        >
+                          <img
+                            src={props?.imageUrls[0]}
+                            alt={props?.title}
+                            className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
+                          />
+                          <div className="flex flex-col gap-1 p-3">
+                            <h1 className="text-lg font-semibold">
+                              {props?.title}
+                            </h1>
+                            <p className="flex gap-1 items-center  text-green-700">
+                              <img src={location} className="w-5 h-5" />
+                              <span className="text-gray-700">
+                                {props?.address}
+                              </span>
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {props?.description.substring(0, 100)}...
+                            </p>
+                            <div className="flex justify-between items-center">
                               <h1 className="text-lg font-semibold">
-                                {props?.title}
+                                ${props?.regularPrice.toLocaleString("en-US")}
+                                {props?.type === "rent" ? " / mo" : ""}
                               </h1>
-                              <p className="flex gap-1 items-center  text-green-700">
-                                <img src={location} className="w-5 h-5" />
-                                <span className="text-gray-700">
-                                  {props?.address}
-                                </span>
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                {props?.description.substring(0, 100)}...
-                              </p>
-                              <div className="flex justify-between items-center">
-                                <h1 className="text-lg font-semibold">
-                                  ${props?.regularPrice.toLocaleString("en-US")}
-                                  {props?.type === "rent" ? " / mo" : ""}
-                                </h1>
-                              </div>
                             </div>
-                          </Link>
-                        ))}
+                          </div>
+                        </Link>
+                      ))}
                   </div>
                 </div>
               </div>
             )}
 
-          {/* Rent */}
-          <div className="p-0 md:p-5 flex flex-col w-full">
-            {properties &&
-              properties?.filter((props: any) => props.type === "rent").length >
-                0 && (
+            {/* Rent */}
+            <div className="p-0 md:p-5 flex flex-col items-center mx-auto w-full">
+              {rentProperties && rentProperties?.length > 0 && (
                 <div className="">
                   <div className="my-2">
                     <h2 className="text-2xl font-semibold text-gray-700 px-2 py-2 bg-gray-200">
@@ -193,51 +214,47 @@ const Home = () => {
                       Show more places for RENT
                     </Link>
                   </div>
-                  <div className="grid grid-cols-4 gap-3">
-                    {properties &&
-                      properties
-
-                        ?.filter((props: any) => props?.type === "rent")
-                        ?.slice(0, 4)
-
-                        ?.map((props: any) => (
-                          <Link
-                            to={`/prop/${props?.id}`}
-                            key={props?.id}
-                            className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
-                          >
-                            <img
-                              src={props?.imageUrls[0]}
-                              alt={props?.title}
-                              className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
-                            />
-                            <div className="flex flex-col gap-1 p-3">
+                  <div className="grid lg:grid-cols-4 sm:grid-cols-3 md:grid-cols-2 gap-3 w-full">
+                    {rentProperties &&
+                      rentProperties?.slice(0, 4)?.map((props: any) => (
+                        <Link
+                          to={`/prop/${props?.id}`}
+                          key={props?.id}
+                          className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
+                        >
+                          <img
+                            src={props?.imageUrls[0]}
+                            alt={props?.title}
+                            className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
+                          />
+                          <div className="flex flex-col gap-1 p-3">
+                            <h1 className="text-lg font-semibold">
+                              {props?.title}
+                            </h1>
+                            <p className="flex gap-1 items-center  text-green-700">
+                              <img src={location} className="w-5 h-5" />
+                              <span className="text-gray-700">
+                                {props?.address}
+                              </span>
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {props?.description.substring(0, 100)}...
+                            </p>
+                            <div className="flex justify-between items-center">
                               <h1 className="text-lg font-semibold">
-                                {props?.title}
+                                ${props?.regularPrice.toLocaleString("en-US")}
+                                {props?.type === "rent" ? " / mo" : ""}
                               </h1>
-                              <p className="flex gap-1 items-center  text-green-700">
-                                <img src={location} className="w-5 h-5" />
-                                <span className="text-gray-700">
-                                  {props?.address}
-                                </span>
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                {props?.description.substring(0, 100)}...
-                              </p>
-                              <div className="flex justify-between items-center">
-                                <h1 className="text-lg font-semibold">
-                                  ${props?.regularPrice.toLocaleString("en-US")}
-                                  {props?.type === "rent" ? " / mo" : ""}
-                                </h1>
-                              </div>
                             </div>
-                          </Link>
-                        ))}
+                          </div>
+                        </Link>
+                      ))}
                   </div>
                 </div>
               )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

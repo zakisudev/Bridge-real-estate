@@ -32,7 +32,7 @@ const Profile = () => {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user && user.id) {
+    if (user && user?.id) {
       try {
         if (formData?.password !== formData?.confirmPassword) {
           toast.error("Passwords do not match");
@@ -50,7 +50,6 @@ const Profile = () => {
             );
           } else if (!loading && error) {
             toast.success(error);
-            dispatch(logoutUser());
             return;
           } else if (res.success) {
             toast.success("Profile updated successfully");
@@ -59,7 +58,16 @@ const Profile = () => {
           }
         } else {
           dispatch(LOGOUT());
-          const res = await updateUser(formData);
+          const res = await updateUser({
+            id: user?.id,
+            username: formData?.username,
+            firstName: formData?.firstName,
+            lastName: formData?.lastName,
+            email: formData?.email,
+            phone: formData?.phone,
+            is_admin: user?.is_admin,
+            name: formData?.firstName + " " + formData?.lastName,
+          });
           if (loading && !error) {
             return (
               <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">

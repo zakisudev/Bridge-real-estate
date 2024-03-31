@@ -15,6 +15,11 @@ import CreateProperty from "./pages/CreateProperty";
 import Profile from "./pages/Profile";
 import UpdateProperty from "./pages/UpdateProperty";
 import PropertyDetail from "./pages/PropertyDetail";
+import AdminLogin from "./pages/AdminLogin";
+import Users from "./pages/Users";
+import AdminRoutes from "./components/AdminRoutes";
+import UserDetails from "./pages/UserDetails";
+import UsersProperties from "./pages/UsersProperties";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +30,12 @@ const router = createBrowserRouter(
         <Route path="update/:id" element={<UpdateProperty />} />
         <Route path="profile" element={<Profile />} />
       </Route>
+      <Route path="admin" element={<AdminRoutes />}>
+        <Route path="users" element={<Users />} />
+        <Route path="users/:id" element={<UserDetails />} />
+        <Route path="users-properties" element={<UsersProperties />} />
+      </Route>
+      <Route path="admin/login" element={<AdminLogin />} />
       <Route path="search" element={<Search />} />
       <Route path="prop" element={<PropertyList />} />
       <Route path="prop/:id" element={<PropertyDetail />} />

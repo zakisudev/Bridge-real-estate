@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { Link } from "react-router-dom";
-import { DownOutlined } from "@ant-design/icons";
 import Pagination from "../components/Pagination";
 import { fetchProperties } from "../redux/properties/propertyActions";
 import Header from "../components/Header";
+import PropertyCard from "../components/PropertyCard";
 
-const PropertyList = () => {
+const UserPropertiesList = () => {
   const dispatch = useDispatch();
   const { properties, loading, error, pagination } = useSelector(
     (state: RootState) => state.property
@@ -19,6 +19,30 @@ const PropertyList = () => {
   return (
     <>
       <Header />
+
+      {/* Error */}
+      {error && (
+        <div className="flex justify-center">
+          <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+            {error}, Please reload
+          </h1>
+        </div>
+      )}
+      <div className="flex flex-1 gap-3 w-full pl-5">
+        <Link
+          to="/"
+          className="text-white rounded-md bg-gray-700 max-w-[360px] font-semibold px-2 py-1 my-3"
+        >
+          Go Home
+        </Link>
+        <Link
+          to="/admin/users-properties"
+          className="text-white rounded-md bg-blue-700 max-w-[360px] font-semibold px-2 py-1 my-3"
+        >
+          All Properties
+        </Link>
+      </div>
+
       <div className="w-full px-10 py-5">
         {loading ? (
           <div className="flex justify-center items-center w-full h-full">
@@ -32,36 +56,19 @@ const PropertyList = () => {
           </div>
         ) : properties && properties?.length > 0 ? (
           <div className="flex flex-col">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <h1 className="text-xl font-semibold my-2 bg-gray-200 py-1 pl-3">
+              All Users Properties
+            </h1>
+            <div className="grid grid-cols-1 gap-3 ">
               {properties &&
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                properties?.map((props: any) => (
+                properties?.map((prop: any) => (
                   <Link
-                    to={`/prop/${props?.id}`}
-                    key={props?.id}
-                    className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
+                    to={`/prop/${prop?.id}`}
+                    key={prop?.id}
+                    className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden"
                   >
-                    <img
-                      src={props?.imageUrls[0]}
-                      alt={props?.title}
-                      className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
-                    />
-                    <div className="flex flex-col gap-1 p-3">
-                      <h1 className="text-lg font-semibold">{props?.title}</h1>
-                      <p className="flex gap-1 items-center  text-green-700">
-                        <DownOutlined />
-                        <span className="text-gray-700">{props?.address}</span>
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {props?.description.substring(0, 100)}...
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <h1 className="text-lg font-semibold">
-                          ${props?.regularPrice.toLocaleString("en-US")}
-                          {props?.type === "rent" ? " / mo" : ""}
-                        </h1>
-                      </div>
-                    </div>
+                    <PropertyCard key={prop?.id} property={prop} />
                   </Link>
                 ))}
             </div>
@@ -78,4 +85,4 @@ const PropertyList = () => {
   );
 };
 
-export default PropertyList;
+export default UserPropertiesList;

@@ -5,7 +5,7 @@ import { createTransaction } from "../utilities/database/sequelize";
 import { Transaction } from "sequelize";
 
 class PropertyService {
-  static async create(payload: Property, req?: Request): Promise<any> {
+  static async create(payload: Property, req: Request): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const transaction = await createTransaction();
       try {
@@ -14,9 +14,9 @@ class PropertyService {
           throw new Error("User not found.");
         }
         payload.user_id = user.id;
-        await PropertyDal.create(payload, transaction);
+        const prop = await PropertyDal.create(payload, transaction);
         await transaction.commit();
-        resolve({ success: true, data: payload });
+        resolve({ success: true, data: prop });
       } catch (error) {
         await transaction.rollback();
         reject(error);

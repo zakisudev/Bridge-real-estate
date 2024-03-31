@@ -9,10 +9,12 @@ import { app } from "../firebase";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createProperty } from "../redux/properties/propertyActions";
+import { addProperty as ADD } from "../services/api";
 import { PropertyModel } from "../redux/interfaces/propertyInterface";
 import Header from "../components/Header";
 import { RootState } from "../redux/rootReducer";
+import { addProperty } from "../redux/properties/propertyReducer";
+import Loader from "../components/Loader";
 
 const CreateProperty = () => {
   const dispatch = useDispatch();
@@ -56,7 +58,6 @@ const CreateProperty = () => {
   );
   const [imageUploading, setImageUploading] = useState(false);
   const [propertyError, setPropertyError] = useState<string | boolean>(false);
-  const [propertyLoading, setPropertyLoading] = useState(false);
   const { loading, error } = useSelector((state: RootState) => state.property);
 
   const handleUploadImages = () => {
@@ -117,7 +118,6 @@ const CreateProperty = () => {
 
   const handleCreateProperty = async (e: React.FormEvent) => {
     e.preventDefault();
-    setPropertyLoading(true);
     try {
       if (formData.imageUrls.length < 1) {
         return setPropertyError("You must upload at least one image");
@@ -129,22 +129,30 @@ const CreateProperty = () => {
       }
 
       try {
-        dispatch(createProperty(formData));
-        if (!loading && !error) {
+        dispatch(addProperty());
+        const res = await ADD(formData);
+        if (!res?.success) {
+          setPropertyError(res?.message);
+          return;
+        }
+        if (loading && !error) {
+          return (
+            <div className="flex justify-center items-center fixed w-full h-full top-0 bottom-0 right-0 left-0 inset-0 bg-black/30">
+              <Loader />
+            </div>
+          );
+        }
+        if (!loading && !error && res?.success) {
           toast.success("Property created successfully");
           reset();
           navigate("/");
-        } else {
-          setPropertyError("Error creating property, try again");
         }
       } catch (error) {
-        console.error(error);
         setPropertyError("Error creating property, try again");
       }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      setPropertyLoading(false);
       setPropertyError("Error creating property, try again");
     }
   };
@@ -419,10 +427,14 @@ const CreateProperty = () => {
             <div className="flex mt-5">
               <button
                 type="submit"
-                disabled={propertyLoading || imageUploading}
-                className="bg-blue-700 text-white px-4 py-2 rounded-md w-80 mb-3 hover:bg-blue-900 transition-all"
+                disabled={imageUploading || !images || images?.length < 1}
+                className={`text-white px-4 py-2 rounded-md w-80 mb-3 transition-all font-bold ${
+                  imageUploading || !images || images?.length < 1
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-700 hover:bg-blue-900"
+                }`}
               >
-                {propertyLoading ? "Creating..." : "Create Property"}
+                {loading ? "Creating..." : "Create Property"}
               </button>
             </div>
           </div>

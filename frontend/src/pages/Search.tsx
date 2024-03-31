@@ -1,27 +1,42 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/rootReducer";
+import { useDispatch } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import Header from "../components/Header";
-import { Pagination } from "antd";
-import { fetchProperties } from "../redux/properties/propertyActions";
+import { Property } from "../redux/interfaces/propertyInterface";
+import { fetchAllProperties } from "../services/api";
 
 const Search = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const searchParams =
     new URLSearchParams(location.search).get("offer") ||
     new URLSearchParams(location.search).get("type") ||
     "";
 
-  const { properties, loading, error, pagination } = useSelector(
-    (state: RootState) => state.property
-  );
+  useEffect(() => {
+    setLoading(true);
+    try {
+      const fetchProperties = async () => {
+        const data = await fetchAllProperties();
+        if (data?.success) {
+          setProperties(data?.properties);
+        }
+        setProperties(data);
+        setLoading(false);
+      };
 
-  const handlePageChange = (page: number | null) => {
-    dispatch(fetchProperties(`?page=${page}`));
-  };
+      fetchProperties();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }, [dispatch]);
+
   return (
     <>
       <Header />
@@ -44,11 +59,7 @@ const Search = () => {
             <h1 className="text-xl font-semibold mt-2">{error}</h1>
           ) : properties && properties?.length > 0 ? (
             <>
-              <Pagination
-                pagination={pagination}
-                onPageChange={handlePageChange}
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-[90%]">
                 {properties &&
                   properties
                     ?.filter(

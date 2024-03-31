@@ -3,8 +3,9 @@ import Logo from "../assets/logo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 import { LogoutOutlined } from "@ant-design/icons";
-import { logoutUser } from "../redux/auth/authActions";
+import { logout } from "../services/api";
 import { useState } from "react";
+import { logoutUser } from "../redux/auth/authActions";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,8 +14,13 @@ const Header = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = async () => {
-    dispatch(logoutUser());
-    navigate("/login", { replace: true });
+    const res = await logout();
+    if (res) {
+      dispatch(logoutUser());
+      navigate("/login", { replace: true });
+    } else {
+      console.error(res);
+    }
   };
 
   const handleDropDown = () => {
@@ -35,6 +41,14 @@ const Header = () => {
             {user.firstName?.charAt(0).toUpperCase()}.
             {user.lastName?.toUpperCase()}
           </button>
+          {user?.is_admin && (
+            <Link
+              to="/admin/users"
+              className="px-3 p-1 rounded-xl border border-gray-300 bg-blue-500 text-white"
+            >
+              Dashboard
+            </Link>
+          )}
 
           {dropDown && (
             <div className="absolute top-12 right-0 bg-white shadow-md rounded-xl px-3 py-1 z-[999]">

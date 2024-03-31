@@ -15,6 +15,7 @@ import {
   getUser,
   getUserFailure,
   addUser,
+  setUser,
   addUserSuccess,
   addUserFailure,
   updateUser,
@@ -23,13 +24,22 @@ import {
   deleteUser,
   deleteUserSuccess,
   deleteUserFailure,
+  resetAll,
 } from "./userReducer";
 
-function* fetchUsersSaga() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function* fetchUsersSaga(): any {
   try {
     yield put(getUsers());
-    const users: UserModelResponse[] = yield call(fetchUsers);
-    yield put(setUsers(users));
+    const users = yield call(fetchUsers);
+    if (users?.name === "AxiosError" || users?.success === false) {
+      yield put(getUserFailure("Error fetching users"));
+      return;
+    } else if (users?.length !== 0) {
+      yield put(setUsers(users));
+    } else {
+      yield put(getUserFailure("users not found"));
+    }
   } catch (error) {
     yield put(getUsersFailure(error));
   }
@@ -40,12 +50,13 @@ function* fetchUserSaga(action: any) {
   try {
     yield put(getUser());
     const user: UserModelResponse = yield call(fetchUser, action.payload);
-
-    if (action.callback && typeof action.callback === "function") {
-      action.callback(user);
+    if (user?.id) {
+      yield put(setUser(user));
     }
+    yield put(resetAll());
   } catch (error) {
     yield put(getUserFailure(error));
+    yield put(resetAll());
   }
 }
 
@@ -55,8 +66,10 @@ function* addUserSaga(user: any) {
     yield put(addUser());
     const newUser: UserModelResponse = yield call(ADD, user);
     yield put(addUserSuccess(newUser));
+    yield put(resetAll());
   } catch (error) {
     yield put(addUserFailure(error));
+    yield put(resetAll());
   }
 }
 

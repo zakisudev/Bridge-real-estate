@@ -2,6 +2,7 @@ import { takeLatest, put, call } from "redux-saga/effects";
 import PropertyActionType from "./propertyTypes";
 import {
   PropertyModel,
+  PropertiesResponse,
   PropertyResponse,
 } from "../interfaces/propertyInterface";
 import {
@@ -32,32 +33,72 @@ import {
 function* getPropertiesSaga(page: { type: string; payload: string }) {
   try {
     yield put(getProperties());
-    const response: PropertyResponse = yield call(
+    const response: PropertiesResponse = yield call(
       fetchProperties,
       page.payload
     );
 
-    yield put(setProperties(response));
+    if (response?.name === "AxiosError" || response?.success === false) {
+      yield put(getPropertiesFailed(response?.message));
+      return;
+    }
+    if (Object.keys(response)?.length === 0) {
+      yield put(getPropertiesFailed("No properties found"));
+      return;
+    }
+    if (response?.properties?.length > 0) {
+      yield put(setProperties(response));
+      return;
+    } else {
+      yield put(getPropertiesFailed("No properties found"));
+      return;
+    }
   } catch (error) {
     yield put(getPropertiesFailed(error));
+    return;
   }
 }
 
 function* getPropertySaga(action: { type: string; payload: string }) {
   try {
     yield put(getProperty());
-    const response: PropertyModel = yield call(fetchProperty, action.payload);
-    yield put(setProperty(response));
+    const response: PropertyResponse = yield call(
+      fetchProperty,
+      action.payload
+    );
+    if (response?.name === "AxiosError" || response?.success === false) {
+      yield put(getPropertyFailed(response?.message));
+      return;
+    }
+    if (response === null) {
+      yield put(getPropertyFailed("No property found"));
+      return;
+    }
+    if (response?.success) {
+      yield put(setProperty(response?.property));
+      return;
+    }
   } catch (error) {
     yield put(getPropertyFailed(error));
+    return;
   }
 }
 
-function* addPropertySaga(action: { type: string; payload: PropertyModel }) {
+function* addPropertySaga(action: {
+  type: string;
+  payload: PropertyModel;
+}): Generator<unknown, void, PropertyResponse> {
   try {
     yield put(addProperty());
     const response: PropertyResponse = yield call(ADD, action.payload);
-    yield put(addPropertySuccess(response));
+    if (response?.name === "AxiosError" || response?.success === false) {
+      yield put(addPropertyFailed(response?.message));
+      return;
+    }
+    if (response?.success) {
+      yield put(addPropertySuccess(response?.property));
+      return;
+    }
   } catch (error) {
     yield put(addPropertyFailed(error));
   }
@@ -67,7 +108,7 @@ function* addPropertySaga(action: { type: string; payload: PropertyModel }) {
 function* updatePropertySaga(action: any) {
   try {
     yield put(updateProperty());
-    const response: PropertyResponse = yield call(UPDATE, action.payload);
+    const response: PropertiesResponse = yield call(UPDATE, action.payload);
     yield put(updatePropertySuccess(response));
   } catch (error) {
     yield put(updatePropertyFailed(error));
@@ -77,7 +118,7 @@ function* updatePropertySaga(action: any) {
 function* deletePropertySaga(action: { type: string; payload: number }) {
   try {
     yield put(deleteProperty());
-    const response: PropertyResponse = yield call(DELETE, action.payload);
+    const response: PropertiesResponse = yield call(DELETE, action.payload);
     yield put(deletePropertySuccess(response));
   } catch (error) {
     yield put(deletePropertyFailed(error));

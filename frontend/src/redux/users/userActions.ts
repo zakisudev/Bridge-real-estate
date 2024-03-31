@@ -8,11 +8,10 @@ export const getUsers = () => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getUser = (id: string, callback: any) => {
+export const getUser = (id: string) => {
   return {
     type: userTypes.GET_USER,
     payload: id,
-    callback,
   };
 };
 

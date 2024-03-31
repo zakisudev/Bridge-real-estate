@@ -64,7 +64,13 @@ const PropertyDetail = () => {
       )}
 
       {/* Error */}
-      {error && <h1 className="text-xl font-semibold mt-2">{error}</h1>}
+      {error && (
+        <div className="flex justify-center">
+          <h1 className="text-xl text-center text-white font-semibold px-5 py-2 mt-3 rounded bg-red-700">
+            {error}, Please reload
+          </h1>
+        </div>
+      )}
 
       {property && !loading && !error && (
         <div className="relative z-10">
@@ -159,7 +165,7 @@ const PropertyDetail = () => {
               {property?.description}
             </p>
 
-            {user && property?.user_id !== user?.id && !contact && (
+            {user && parseInt(property?.user?.id) !== user?.id && !contact && (
               <div className="flex flex-col gap-2 mt-5">
                 <button
                   onClick={() => setContact(true)}
