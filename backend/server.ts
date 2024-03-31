@@ -8,6 +8,11 @@ import passport from "passport";
 import passportConfig from "./utilities/passport/passport";
 import UserService from "./services/User.service";
 
+/**
+ * The port number for the server.
+ * If the `PORT` environment variable is set, it will be used as the port number.
+ * Otherwise, the default port number is 5000.
+ */
 const port = process.env.PORT || 5000;
 
 const app = express();
