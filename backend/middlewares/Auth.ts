@@ -98,4 +98,14 @@ let generateAccessToken = (request: any, response: any, next: Function) => {
   next();
 };
 
-export { authHeader, generateAccessToken, authentication, response };
+let isAdmin = (req: any, res: Response, next: NextFunction) => {
+  let user: User = req.user;
+  if (!user.is_admin) {
+    return res
+      .status(403)
+      .json({ message: "Access denied You Are Not Admin", success: false });
+  }
+  next();
+};
+
+export { authHeader, generateAccessToken, authentication, response, isAdmin };
