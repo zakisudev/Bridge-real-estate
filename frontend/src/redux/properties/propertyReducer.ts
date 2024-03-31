@@ -55,6 +55,7 @@ const propertySlice = createSlice({
     },
 
     getProperty(state) {
+      state.error = null;
       state.loading = true;
     },
 
