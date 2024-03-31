@@ -4,7 +4,17 @@ import { User } from "../models/User";
 import { title } from "process";
 import { Op } from "sequelize";
 
+/**
+ * Data Access Layer for Property operations.
+ */
 class PropertyDal {
+  /**
+   * Creates a new property.
+   *
+   * @param payload - The property data to be created.
+   * @param transaction - Optional transaction object for database operations.
+   * @returns A Promise that resolves to the created property.
+   */
   static async create(
     payload: Property,
     transaction?: Transaction
@@ -25,6 +35,11 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Retrieves all properties based on the provided query.
+   * @param query - The query object used to filter the properties.
+   * @returns A promise that resolves to an array of Property objects.
+   */
   static async findAll(query: any): Promise<Property[]> {
     return new Promise((resolve, reject) => {
       Property.findAll({
@@ -55,6 +70,11 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Finds a single property based on the provided query.
+   * @param query - The query used to find the property.
+   * @returns A promise that resolves to the found property.
+   */
   static async findOne(query: any): Promise<any> {
     return new Promise((resolve, reject) => {
       Property.findByPk(query, {
@@ -83,6 +103,14 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Updates a property with the specified ID.
+   *
+   * @param id - The ID of the property to update.
+   * @param payload - The updated property data.
+   * @param transaction - Optional transaction object for database operations.
+   * @returns A promise that resolves to the updated property data.
+   */
   static async update(
     id: string,
     payload: Property,
@@ -118,6 +146,10 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Retrieves the count of properties.
+   * @returns A Promise that resolves to the number of properties.
+   */
   static async getCount(): Promise<number> {
     return new Promise((resolve, reject) => {
       Property.count()
@@ -130,6 +162,14 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Retrieves a paged list of properties based on the provided parameters.
+   * @param page - The page number to retrieve.
+   * @param limit - The maximum number of properties to retrieve per page.
+   * @param filter - (Optional) An object representing the filter criteria to apply.
+   * @param search - (Optional) A string used for searching properties based on title, description, address, or type.
+   * @returns A Promise that resolves to an array of Property objects.
+   */
   static async getPaged(
     page: number,
     limit: number,
@@ -170,6 +210,11 @@ class PropertyDal {
     });
   }
 
+  /**
+   * Deletes a property with the specified ID.
+   * @param id - The ID of the property to delete.
+   * @returns A Promise that resolves to an object with the success status and the deleted property ID.
+   */
   static async delete(id: string): Promise<any> {
     return new Promise((resolve, reject) => {
       Property.destroy({ where: { id } })
