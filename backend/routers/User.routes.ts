@@ -5,14 +5,15 @@ import {
   generateAccessToken,
   response,
   authHeader,
+  isAdmin,
 } from "../middlewares/Auth";
 
 let router: Router = Router();
 
 router
   .post("/", UserController.create)
-  .get("/", authHeader, UserController.findAll)
-  .get("/get-paged", authHeader, UserController.getPaged)
+  .get("/", authHeader, isAdmin, UserController.findAll)
+  .get("/get-paged", authHeader, isAdmin, UserController.getPaged)
   .get("/:id", authHeader, UserController.findOne)
   .put("/", authHeader, UserController.update)
   .post("/login", authentication, generateAccessToken, response)
