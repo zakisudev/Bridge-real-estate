@@ -180,6 +180,16 @@ class PropertyDal {
       let whereClause = {};
 
       if (filter) {
+        for (const key in filter) {
+          if (filter[key] === "true") {
+            filter[key] = true;
+          } else if (filter[key] === "false") {
+            filter[key] = false;
+          } else if (filter[key] === "") {
+            delete filter[key];
+          }
+        }
+
         whereClause = { ...filter };
       }
 
