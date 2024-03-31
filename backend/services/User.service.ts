@@ -5,7 +5,16 @@ import UserDal from "../dals/User.dal";
 import { resolve } from "path";
 import { hashPassword } from "../utilities/helper/helper";
 
+/**
+ * Service class for managing user operations.
+ */
 class UserService {
+  /**
+   * Creates a new user.
+   * @param payload - The user data to be created.
+   * @returns A Promise that resolves to an object containing the created user details, success status, and a message.
+   * @throws If an error occurs during the creation process.
+   */
   static create(payload: User): Promise<any> {
     return new Promise(async (resolve, reject) => {
       const transaction = await createTransaction();
@@ -32,6 +41,11 @@ class UserService {
     });
   }
 
+  /**
+   * Retrieves all users based on the provided query.
+   * @param query - The query object used to filter the users.
+   * @returns A promise that resolves to an array of User objects.
+   */
   static async findAll(query: any): Promise<User[]> {
     return new Promise((resolve, reject) => {
       UserDal.findAll(query)
@@ -44,6 +58,11 @@ class UserService {
     });
   }
 
+  /**
+   * Finds a user by their ID.
+   * @param id - The ID of the user to find.
+   * @returns A Promise that resolves to the found user.
+   */
   static async findOne(id: string): Promise<User> {
     return new Promise((resolve, reject) => {
       let query = { id: id };
@@ -57,6 +76,11 @@ class UserService {
     });
   }
 
+  /**
+   * Finds a user by email.
+   * @param query - The query object containing the email.
+   * @returns A promise that resolves with the user object if found, or rejects with an error.
+   */
   public static findByEmail(query: any): Promise<User> {
     return new Promise((resolve, reject) => {
       UserDal.findByEmail(query)
@@ -67,6 +91,14 @@ class UserService {
     });
   }
 
+  /**
+   * Updates a user with the specified ID using the provided payload.
+   * If the payload contains a password, it will be hashed before updating the user.
+   * @param id - The ID of the user to update.
+   * @param payload - The payload containing the updated user data.
+   * @returns A Promise that resolves to an object with the updated user data.
+   * @throws If an error occurs during the update process.
+   */
   static async update(id: string, payload: User): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let query = { id: id || payload.id };
@@ -97,6 +129,12 @@ class UserService {
     });
   }
 
+  /**
+   * Retrieves a paged list of users along with the total count of users.
+   * @param page - The page number.
+   * @param limit - The maximum number of users per page.
+   * @returns A promise that resolves to an object containing the paged list of users and the total count of users.
+   */
   static async getPagedWithCount(
     page: number,
     limit: number
@@ -112,6 +150,11 @@ class UserService {
     });
   }
 
+  /**
+   * Deletes a user by their ID.
+   * @param id - The ID of the user to delete.
+   * @returns A promise that resolves to an object with a success flag and the deleted user's ID.
+   */
   static async delete(id: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let query = { id: id };
