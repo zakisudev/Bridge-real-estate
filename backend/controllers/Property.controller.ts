@@ -85,11 +85,11 @@ class PropertyController {
   }
 
   static async getPaged(req: Request, res: Response) {
-    const { page: pageQuery, limit: limitQuery } = req.query;
+    const { page: pageQuery, limit: limitQuery, ...filter } = req.query;
     const page = Number(pageQuery) || 1;
     const limit = Number(limitQuery) || 9;
 
-    PropertyService.getPagedWithCount(page, limit)
+    PropertyService.getPagedWithCount(page, limit, filter)
       .then(({ properties, count }) => {
         const totalPages = Math.ceil(count / limit);
         const prevPage = page > 1 ? page - 1 : null;
