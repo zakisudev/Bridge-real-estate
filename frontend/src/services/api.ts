@@ -112,7 +112,8 @@ const fetchAllProperties = async () => {
 // Property API calls
 const fetchProperties = async (page: string) => {
   try {
-    const response = await axios.get(`${API_URL}/prop/get-paged${page}`);
+    const response = await axios.get(`${API_URL}/prop/get-paged?${page}`);
+    console.log(response);
     return response?.data;
   } catch (error) {
     return error;
