@@ -3,7 +3,16 @@ import evalidate from "evalidate";
 import { Property } from "../models";
 import PropertyService from "../services/Property.service";
 
+/**
+ * Controller class for managing property-related operations.
+ */
 class PropertyController {
+  /**
+   * Creates a new property.
+   *
+   * @param req - The request object containing the property data.
+   * @param res - The response object used to send the result back to the client.
+   */
   static async create(req: Request, res: Response) {
     const Schema = new evalidate.schema({
       title: evalidate.string().required(),
@@ -42,6 +51,13 @@ class PropertyController {
     }
   }
 
+  /**
+   * Retrieves all properties based on the provided query parameters.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   * @returns A JSON response containing an array of properties.
+   */
   static async findAll(req: Request, res: Response) {
     const query = req.query;
 
@@ -54,6 +70,12 @@ class PropertyController {
       });
   }
 
+  /**
+   * Finds a property by its ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async findById(req: Request, res: Response) {
     const id = req.params.id;
 
@@ -66,6 +88,12 @@ class PropertyController {
       });
   }
 
+  /**
+   * Updates a property based on the provided request body.
+   *
+   * @param req - The request object containing the property ID and updated data.
+   * @param res - The response object used to send the result back to the client.
+   */
   static async update(req: Request, res: Response) {
     const Schema = new evalidate.schema({
       id: evalidate.number().required(),
@@ -88,6 +116,13 @@ class PropertyController {
     }
   }
 
+  /**
+   * Retrieves a paged list of properties with pagination information.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   * @returns A JSON response containing the paged properties and pagination information.
+   */
   static async getPaged(req: Request, res: Response) {
     const { page: pageQuery, limit: limitQuery, search, ...filter } = req.query;
     const page = Number(pageQuery) || 1;
@@ -115,6 +150,12 @@ class PropertyController {
       });
   }
 
+  /**
+   * Deletes a property by its ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async delete(req: Request, res: Response) {
     const id = req.params.id;
 
