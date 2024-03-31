@@ -38,15 +38,11 @@ function* getPropertiesSaga(page: { type: string; payload: string }) {
       page.payload
     );
 
-    if (response?.name === "AxiosError" || response?.success === false) {
+    if (response?.name === "AxiosError") {
       yield put(getPropertiesFailed(response?.message));
       return;
     }
-    if (Object.keys(response)?.length === 0) {
-      yield put(getPropertiesFailed("No properties found"));
-      return;
-    }
-    if (response?.properties?.length > 0) {
+    if (response) {
       yield put(setProperties(response));
       return;
     } else {
