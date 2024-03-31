@@ -2,6 +2,7 @@ import { Transaction } from "sequelize";
 import { Property } from "../models";
 import { User } from "../models/User";
 import { title } from "process";
+import { Op } from "sequelize";
 
 class PropertyDal {
   static async create(
@@ -132,11 +133,30 @@ class PropertyDal {
   static async getPaged(
     page: number,
     limit: number,
-    filter?: any
+    filter?: any,
+    search?: string
   ): Promise<Property[]> {
     return new Promise((resolve, reject) => {
+      let whereClause = {};
+
+      if (filter) {
+        whereClause = { ...filter };
+      }
+
+      if (search) {
+        whereClause = {
+          ...whereClause,
+          [Op.or]: [
+            { title: { [Op.like]: `%${search}%` } },
+            { description: { [Op.like]: `%${search}%` } },
+            { address: { [Op.like]: `%${search}%` } },
+            { type: { [Op.like]: `%${search}%` } },
+          ],
+        };
+      }
+
       Property.findAll({
-        where: filter ?? {},
+        where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
         limit: limit,
         offset: (page - 1) * limit,
         order: [["createdAt", "DESC"]],
