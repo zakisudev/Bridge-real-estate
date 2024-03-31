@@ -63,7 +63,8 @@ const Search = () => {
         `search=${searchData.search}&type=${searchData.type}&offer=${searchData.offer}&page=${searchData.page}`
       )
     );
-  }, [dispatch, searchData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, searchData.offer, searchData.type]);
 
   return (
     <>
