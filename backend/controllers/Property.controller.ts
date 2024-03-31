@@ -133,17 +133,23 @@ class PropertyController {
         const totalPages = Math.ceil(count / limit);
         const prevPage = page > 1 ? page - 1 : null;
         const nextPage = page < totalPages ? page + 1 : null;
-        res.status(200).json({
+        const response: any = {
           properties,
-          pagination: {
+        };
+
+        // Only include pagination object if a filter is applied
+        if (Object.keys(filter).length > 0) {
+          response.pagination = {
             totalPages,
             prevPage,
             nextPage,
             totalItems: count,
             currentPage: page,
             pageSize: limit,
-          },
-        });
+          };
+        }
+
+        res.status(200).json(response);
       })
       .catch((error: Error) => {
         res.status(400).json({ success: false, message: error.message });
