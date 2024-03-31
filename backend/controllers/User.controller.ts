@@ -4,7 +4,16 @@ import { User } from "../models";
 import UserService from "../services/User.service";
 import UserDal from "../dals/User.dal";
 
+/**
+ * Controller class for handling user-related operations.
+ */
 class UserController {
+  /**
+   * Creates a new user.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async create(req: Request, res: Response) {
     const Schema = new evalidate.schema({
       username: evalidate.string().required(),
@@ -36,6 +45,12 @@ class UserController {
     }
   }
 
+  /**
+   * Retrieves all users based on the provided query parameters.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async findAll(req: Request, res: Response) {
     const query = req.query;
     UserService.findAll(query)
@@ -47,6 +62,12 @@ class UserController {
       });
   }
 
+  /**
+   * Retrieves a single user by their ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async findOne(req: Request, res: Response) {
     const id = req.params.id;
     UserService.findOne(id)
@@ -62,6 +83,11 @@ class UserController {
       });
   }
 
+  /**
+   * Updates a user based on the provided request body.
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async update(req: Request, res: Response) {
     const Schema = new evalidate.schema({
       id: evalidate.number().required(),
@@ -84,6 +110,12 @@ class UserController {
     }
   }
 
+  /**
+   * Retrieves a paged list of users with pagination information.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async getPaged(req: Request, res: Response) {
     const { page: pageQuery, limit: limitQuery } = req.query;
     const page = Number(pageQuery) || 1;
@@ -110,6 +142,12 @@ class UserController {
       });
   }
 
+  /**
+   * Logs out the user.
+   * @param req - The request object.
+   * @param res - The response object.
+   * @returns A JSON response indicating the status of the logout operation.
+   */
   static async logout(req: Request, res: Response) {
     try {
       if (req.headers.authorization) {
@@ -120,6 +158,12 @@ class UserController {
     }
   }
 
+  /**
+   * Deletes a user by ID.
+   *
+   * @param req - The request object.
+   * @param res - The response object.
+   */
   static async delete(req: Request, res: Response) {
     const id = req.params.id;
     UserService.delete(id)
