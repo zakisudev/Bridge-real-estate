@@ -67,11 +67,12 @@ class PropertyService {
 
   static async getPagedWithCount(
     page: number,
-    limit: number
+    limit: number,
+    filter?: any
   ): Promise<{ properties: Property[]; count: number }> {
     return new Promise(async (resolve, reject) => {
       try {
-        const properties = await PropertyDal.getPaged(page, limit);
+        const properties = await PropertyDal.getPaged(page, limit, filter);
         const count = await PropertyDal.getCount();
         resolve({ properties, count });
       } catch (error) {
