@@ -4,12 +4,21 @@ import UserService from "../../services/User.service";
 import passportJwt from "passport-jwt";
 import { User } from "../../models";
 
+/**
+ * Configuration object for security settings.
+ */
 let security: { saltRound: number; secret: any; token_expiration: number } = {
   saltRound: 10,
   secret: "SECRET_KEY",
   token_expiration: 60 * 60 * 24 * 30,
 };
 
+/**
+ * Local strategy for passport authentication.
+ * @param {string} username - The username field.
+ * @param {string} password - The password field.
+ * @param {Function} done - The callback function.
+ */
 let localStrategy = new Strategy(
   {
     usernameField: "email",
