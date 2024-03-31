@@ -5,6 +5,10 @@ import { MODEL } from "../../models";
 
 export let sequelize: Sequelize;
 
+/**
+ * Initializes and connects to the database using Sequelize.
+ * @returns {Promise<void>} A promise that resolves when the database is connected successfully or rejects with an error if the connection fails.
+ */
 export default async () => {
   let dbHost: string = config.get("production.host");
   let dbName: string = config.get("production.name");
@@ -33,6 +37,10 @@ export default async () => {
     });
 };
 
+/**
+ * Creates a transaction using Sequelize.
+ * @returns {Promise<Transaction>} A promise that resolves to the created transaction.
+ */
 export const createTransaction = (): Promise<Transaction> => {
   return new Promise(async (resolve, reject) => {
     try {
