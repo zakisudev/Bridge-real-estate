@@ -5,6 +5,17 @@ import UserDal from "../dals/User.dal";
 import passport from "passport";
 import { User } from "../models";
 
+/**
+ * Middleware function for authentication.
+ * Validates the presence of email and password in the request body.
+ * Authenticates the user using passport's local strategy.
+ * If authentication is successful, the user is logged in and the next middleware is called.
+ * If authentication fails, an error response is sent.
+ * If an error occurs during authentication, an error response is sent.
+ * @param request - The Express request object.
+ * @param response - The Express response object.
+ * @param next - The next middleware function.
+ */
 let authentication = (request: Request, response: Response, next: Function) => {
   if (!request.body.email) {
     return response.status(400).json({
@@ -41,6 +52,15 @@ let authentication = (request: Request, response: Response, next: Function) => {
   )(request, response, next);
 };
 
+/**
+ * Middleware function to check the authorization header and verify the token.
+ * If the token is valid, it sets the user object on the request and calls the next middleware.
+ * If the token is invalid or missing, it returns an error response.
+ *
+ * @param req - The Express request object.
+ * @param res - The Express response object.
+ * @param next - The next middleware function.
+ */
 const authHeader = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
@@ -64,6 +84,11 @@ const authHeader = (req: Request, res: Response, next: NextFunction) => {
   );
 };
 
+/**
+ * Handles the response for an authenticated user.
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 const response = (req: any, res: Response) => {
   let user = req.user;
 
@@ -80,6 +105,13 @@ const response = (req: any, res: Response) => {
   });
 };
 
+/**
+ * Generates an access token for the authenticated user.
+ *
+ * @param request - The HTTP request object.
+ * @param response - The HTTP response object.
+ * @param next - The next middleware function.
+ */
 let generateAccessToken = (request: any, response: any, next: Function) => {
   let user: User = request.user;
 
@@ -98,6 +130,13 @@ let generateAccessToken = (request: any, response: any, next: Function) => {
   next();
 };
 
+/**
+ * Middleware to check if the user is an admin.
+ *
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next function to call.
+ */
 let isAdmin = (req: any, res: Response, next: NextFunction) => {
   let user: User = req.user;
   if (!user.is_admin) {
