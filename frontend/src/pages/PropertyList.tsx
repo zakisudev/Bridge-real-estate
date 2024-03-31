@@ -5,6 +5,7 @@ import { DownOutlined } from "@ant-design/icons";
 import Pagination from "../components/Pagination";
 import { fetchProperties } from "../redux/properties/propertyActions";
 import Header from "../components/Header";
+import { useEffect } from "react";
 
 const PropertyList = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,10 @@ const PropertyList = () => {
   const handlePageChange = (page: number | null) => {
     dispatch(fetchProperties(`?page=${page}`));
   };
+
+  useEffect(() => {
+    dispatch(fetchProperties("page=1"));
+  }, [dispatch]);
 
   return (
     <>
