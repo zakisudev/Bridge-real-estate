@@ -29,7 +29,7 @@ const Search = () => {
   const [searchData, setSearchData] = useState({
     search: urlParams.get("search") || "",
     type: urlParams.get("type") === "all" ? "" : urlParams.get("type"),
-    offer: urlParams.get("offer") || false,
+    offer: urlParams.get("offer") === "false" ? "" : "true",
     page: 1,
   });
   const searchQuery = urlParams.toString();
@@ -148,7 +148,10 @@ const Search = () => {
                   id="offer"
                   checked={searchData.offer.toString() === "true"}
                   onChange={(e) =>
-                    setSearchData({ ...searchData, offer: e.target.checked })
+                    setSearchData({
+                      ...searchData,
+                      offer: e.target.checked.toString(),
+                    })
                   }
                   className="w-5 mr-1"
                 />
@@ -184,12 +187,12 @@ const Search = () => {
                     <Link
                       to={`/prop/${props.id}`}
                       key={props.id}
-                      className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[360px]"
+                      className="flex flex-wrap gap-4 bg-white rounded-lg shadow-lg overflow-hidden w-[300px]"
                     >
                       <img
                         src={props.imageUrls[0]}
                         alt={props.title}
-                        className="w-[80%] h-48 object-cover hover:scale-105 transition-all duration-300"
+                        className="w-full h-48 object-cover hover:scale-105 transition-all duration-300"
                       />
                       <div className="flex flex-col gap-1 p-3">
                         <h1 className="text-lg font-semibold">{props.title}</h1>

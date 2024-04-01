@@ -14,7 +14,7 @@ const PropertyList = () => {
   );
 
   const handlePageChange = (page: number | null) => {
-    dispatch(fetchProperties(`?page=${page}`));
+    dispatch(fetchProperties(`page=${page}`));
   };
 
   useEffect(() => {

@@ -130,7 +130,10 @@ class PropertyController {
 
     PropertyService.getPagedWithCount(page, limit, filter, search as string)
       .then(({ properties, count }) => {
-        const totalPages = Math.ceil(properties.length / limit);
+        const totalPages =
+          Object.keys(filter).length > 0 || search
+            ? Math.ceil(properties.length / limit)
+            : Math.ceil(count / limit);
         const prevPage = page > 1 ? page - 1 : null;
         const nextPage = page < totalPages ? page + 1 : null;
         res.status(200).json({

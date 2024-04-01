@@ -151,7 +151,7 @@ const Home = () => {
                         Recent places for SALE
                       </h2>
                       <Link
-                        to="/search?type=sale&offer=false"
+                        to="/search?type=sale"
                         className="text-blue-600 hover:underline text-sm text-semibold"
                       >
                         Show more places for SALE
@@ -209,7 +209,7 @@ const Home = () => {
                         Recent places for RENT
                       </h2>
                       <Link
-                        to="/search?type=rent&offer=false"
+                        to="/search?type=rent"
                         className="text-blue-600 hover:underline text-sm text-semibold"
                       >
                         Show more places for RENT
