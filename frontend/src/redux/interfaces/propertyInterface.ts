@@ -16,6 +16,15 @@ export interface Property {
   user_id: number;
   createdAt?: string;
   updatedAt?: string;
+  user: {
+    id: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    is_admin: boolean;
+  };
 }
 
 export interface PropertiesResponse {
