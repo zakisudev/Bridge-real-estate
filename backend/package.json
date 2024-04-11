@@ -6,8 +6,8 @@
   "scripts": {
     "start": "tsc && ts-node server.js",
     "server": "ts-node-dev --respawn server.ts",
-    "test": "jest --watchAll",
     "build": "tsc",
+    "test": "jest --watchAll",
     "test:coverage": "jest --coverage"
   },
   "repository": {
