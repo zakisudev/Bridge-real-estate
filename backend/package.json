@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "tsc && ts-node server.js",
-    "server": "ts-node-dev --respawn server.ts",
     "build": "tsc",
+    "server": "ts-node-dev --respawn server.ts",
     "test": "jest --watchAll",
     "test:coverage": "jest --coverage"
   },
