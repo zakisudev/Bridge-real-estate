@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Property,
-  PropertyResponse,
+  PropertiesResponse,
 } from "../redux/interfaces/propertyInterface";
 
 const ContactForm = ({ property }: { property: Property }) => {
-  const [landlord, setLandlord] = useState<PropertyResponse["user"] | null>(
+  const [landlord, setLandlord] = useState<PropertiesResponse["user"] | null>(
     null
   );
   const [message, setMessage] = useState("");
