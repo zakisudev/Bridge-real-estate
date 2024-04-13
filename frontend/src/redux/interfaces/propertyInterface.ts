@@ -19,10 +19,11 @@ export interface Property {
   user: {
     id: number;
     username: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    password: string;
-    createdAt?: string;
-    updatedAt?: string;
+    phone: string;
+    is_admin: boolean;
   };
 }
 
